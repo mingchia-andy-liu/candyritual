@@ -28,7 +28,7 @@ Play.prototype = {
     this.traps = this.game.add.group();
 
     // create and add a new Bird object
-    this.bird = new Bird(this.game, 100, this.game.height/2);
+    this.bird = new Bird(this.game, 100, this.ground.y - 15);
     this.game.add.existing(this.bird);
 
     // create and add a new Trap object
