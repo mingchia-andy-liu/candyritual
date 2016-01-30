@@ -1,6 +1,7 @@
 
 'use strict';
 var Bird = require('../prefabs/bird');
+var Enemy = require('../prefabs/enemy');
 var Ground = require('../prefabs/ground');
 var Pipe = require('../prefabs/pipe');
 var PipeGroup = require('../prefabs/pipeGroup');
@@ -30,8 +31,12 @@ Play.prototype = {
     // create and add a new Bird object
     this.bird = new Bird(this.game, 100, this.ground.y-15);
     this.game.add.existing(this.bird);
-
     this.setUpKeyListerners();
+
+    //create and add new Enemy object
+    this.enemy = new Enemy(this.game, 700, 200);
+    this.game.add.existing(this.enemy);
+    this.setUpEnemyKeyListeners();
 
     // add mouse/touch controls
     this.game.input.onDown.addOnce(this.startGame, this);
@@ -144,6 +149,20 @@ Play.prototype = {
 
     this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
     this.downKey.onDown.add(this.bird.moveDown, this.bird);
+  },
+  setUpEnemyKeyListeners: function() {
+    // add enemy keyboard controls
+    this.enemyUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+    this.enemyUpKey.onDown.add(this.enemy.moveUp, this.enemy);
+
+    this.enemyLeftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+    this.enemyLeftKey.onDown.add(this.enemy.moveLeft, this.enemy);
+
+    this.enemyRightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+    this.enemyRightKey.onDown.add(this.enemy.moveRight, this.enemy);
+
+    this.enemyDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    this.enemyDownKey.onDown.add(this.enemy.moveDown, this.enemy);
   }
 };
 
