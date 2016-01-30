@@ -7,6 +7,7 @@ var Pipe = require('../prefabs/pipe');
 var PipeGroup = require('../prefabs/pipeGroup');
 var Scoreboard = require('../prefabs/scoreboard');
 var Trap = require('../prefabs/trap');
+var Lazer = require('../prefabs/traps/lazer');
 
 function Play() {
 }
@@ -30,20 +31,17 @@ Play.prototype = {
     this.ground = new Ground(this.game, 0, 350, 840, 420);
     this.game.add.existing(this.ground);
 
-    // create and add a new Trap object
-    this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
-    this.game.add.existing(this.trap);
-
     // create and add a new Bird object
-    this.bird = new Bird(this.game, 100, this.ground.y - 15);
+    this.bird = new Bird(this.game, 100, this.ground.y-15);
     this.game.add.existing(this.bird);
+
     this.setUpKeyListerners();
 
     //create and add new Enemy object
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
     this.setUpEnemyKeyListeners();
-    
+
     // add mouse/touch controls
     this.game.input.onDown.addOnce(this.startGame, this);
     this.game.input.onDown.add(this.bird.flap, this.bird);
@@ -74,6 +72,7 @@ Play.prototype = {
     // enable collisions between the bird and the ground
     // this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
     this.game.physics.arcade.collide(this.bird, this.ground);
+    this.game.physics.arcade.collide(this.bird, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.bird, this.trap, this.damageHandler, null, this);
 
     if(!this.gameover) {
@@ -88,11 +87,6 @@ Play.prototype = {
       this.deathHandler();
     }
 
-    if (isNaN(this.trap.x) || this.trap.x < 20) {
-        this.trap.x = this.game.width + 20;
-        this.trap.y = this.game.rnd.integerInRange(0, this.game.height);
-        this.trap.body.velocity.x = 0;
-    }
 
 
   },
@@ -131,6 +125,14 @@ Play.prototype = {
         this.deathHandler();
     }
   },
+  lazerHandler: function(bird, enemy) {
+    if (enemy.isHarmful) {
+      console.log(enemy.isHarmful);
+      this.damageHandler(bird, enemy);
+    } else {
+      console.log("IS NOT HARMFUL");
+    }
+  },
   deathHandler: function(bird, enemy) {
     if(!this.gameover) {
       this.groundHitSound.play();
@@ -146,14 +148,19 @@ Play.prototype = {
 
   },
   generatePipes: function() {
-    var pipeY = this.game.rnd.integerInRange(-100, 100);
+    var pipeY = this.game.rnd.integerInRange(0, 50);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-      pipeGroup = new PipeGroup(this.game, this.pipes);
+      // pipeGroup = new PipeGroup(this.game, this.pipes);
     }
-    pipeGroup.reset(this.game.width, pipeY);
-
-
+    // pipeGroup.reset(this.game.width, pipeY);
+  },
+  generateLazer: function() {
+    var lazerY = this.game.rnd.integerInRange(0, 500);
+    // create and add a new lazer object
+    this.lazer = new Lazer(this.game, this.game.width-25, lazerY);
+    this.game.add.existing(this.lazer);
+    // this.lazer.move();
   },
   setUpKeyListerners: function() {
     // add keyboard controls
@@ -169,10 +176,6 @@ Play.prototype = {
 
     this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
     this.downKey.onDown.add(this.bird.moveDown, this.bird);
-
-    this.shot = this.input.keyboard.addKey(Phaser.Keyboard.T);
-    this.shot.onDown.addOnce(this.startGame, this);
-    this.shot.onDown.add(this.trap.shoot, this.trap);
   },
   setUpEnemyKeyListeners: function() {
     // add enemy keyboard controls
@@ -187,8 +190,22 @@ Play.prototype = {
 
     this.enemyDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     this.enemyDownKey.onDown.add(this.enemy.moveDown, this.enemy);
-  }
-  
+
+    this.enemyGKey = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
+    this.enemyGKey.onDown.add(this.generateLazer, this);
+  },
+    generateTraps: function() {
+    var trapY = this.game.rnd.integerInRange(-100, 100);
+    // var trapGroup = this.traps.getFirstExists(false);
+    // if(!trapGroup) {
+    var trapGroup = new TrapGroup(this.game, this.traps, 3);
+    // }
+    // trapGroup.reset(this.game.width, trapY);
+
+
+  },
+
+
 };
 
 module.exports = Play;

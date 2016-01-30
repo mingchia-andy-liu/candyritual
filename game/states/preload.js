@@ -18,7 +18,8 @@ Preload.prototype = {
     //TODO: UPDATE TITLE
     this.load.image('title', 'assets/title.png');
 
-    //TODO: UPDATE SPRITE
+    //TODO: UPDATE SPRITES
+    this.load.spritesheet('lazer', 'assets/pipes.png', 54,320,2);
     this.load.spritesheet('bird', 'assets/bird.png', 34,24,3);
     this.load.spritesheet('enemy', 'assets/enemy.png', 34,24,3);
     this.load.spritesheet('pipe', 'assets/pipes.png', 54,320,2);
