@@ -10,6 +10,7 @@ var Char1 = function(game, x, y, frame) {
   this.animations.play('walk');
   // this.animations.add('duck', [3], 10, true);
 
+
   this.flapSound = this.game.add.audio('flap');
 
   this.name = 'char1';

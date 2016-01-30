@@ -32,7 +32,7 @@ Play.prototype = {
     this.game.physics.arcade.gravity.y = 1200;
 
     // add the background sprite
-    this.background = this.game.add.tileSprite(0,-50,840,420,'background');
+    this.background = this.game.add.tileSprite(0,-42,840,420,'background');
     this.healthBar1 = this.game.add.sprite(0, 0, 'heart');
     this.healthBar1.scale.x = 2;
     this.healthBar1.scale.y = 2;
@@ -48,7 +48,7 @@ Play.prototype = {
     this.platforms = this.game.add.group();
 
     // create and add a new Ground object
-    this.ground = new Ground(this.game, 0, 350, 840, 420);
+    this.ground = new Ground(this.game, 0, this.game.height-42, 840, 420);
     this.game.add.existing(this.ground);
 
     // create and add a new Char1 object
@@ -84,6 +84,8 @@ Play.prototype = {
     this.pipeGenerator = null;
 
     this.gameover = false;
+
+    Phaser.Canvas.setSmoothingEnabled(this, true);
 
     this.sounds = {
       pipeHitSound: this.game.add.audio('pipeHit'),
