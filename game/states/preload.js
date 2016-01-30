@@ -25,7 +25,7 @@ Preload.prototype = {
     this.load.spritesheet('pipe', 'assets/pipes.png', 54,320,2);
     this.load.spritesheet('platform', 'assets/platform.png',320,27,3);
     this.load.image('startButton', 'assets/start-button.png');
-    this.load.image('healthBar', 'assets/medals.png');
+    this.load.spritesheet('heart', 'assets/hearts.png', 21, 21, 1);
     this.load.image('Lava', 'assets/test.png');
 
     //TODO: UPDATE INSTRUCTIONS

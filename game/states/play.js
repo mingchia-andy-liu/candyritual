@@ -33,9 +33,15 @@ Play.prototype = {
 
     // add the background sprite
     this.background = this.game.add.tileSprite(0,-50,840,420,'background');
-    this.healthBar1 = this.game.add.sprite(0, 0, 'healthBar');
-    this.healthBar2 = this.game.add.sprite(50, 0, 'healthBar');
-    this.healthBar3 = this.game.add.sprite(100, 0, 'healthBar');
+    this.healthBar1 = this.game.add.sprite(0, 0, 'heart');
+    this.healthBar1.scale.x = 2;
+    this.healthBar1.scale.y = 2;
+    this.healthBar2 = this.game.add.sprite(50, 0, 'heart');
+    this.healthBar2.scale.x = 2;
+    this.healthBar2.scale.y = 2;
+    this.healthBar3 = this.game.add.sprite(100, 0, 'heart');
+    this.healthBar3.scale.x = 2;
+    this.healthBar3.scale.y = 2;
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
