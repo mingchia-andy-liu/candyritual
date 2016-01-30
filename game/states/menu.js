@@ -13,7 +13,7 @@ Menu.prototype = {
     // add the ground sprite as a tile
     // and start scrolling in the negative x direction
     this.ground = this.game.add.tileSprite(0,350,840,420,'ground');
-    this.ground.autoScroll(-200,0);
+    this.ground.autoScroll(-100,0);
 
     /** STEP 1 **/
     // create a group to put the title assets in
@@ -23,13 +23,15 @@ Menu.prototype = {
     /** STEP 2 **/
     // create the title sprite
     // and add it to the group
-    this.title = this.add.sprite(0,0,'title');
+    this.title = this.add.sprite(this.game.width/2,100,'title');
+    this.title.anchor.setTo(0.5,0.5);
     this.titleGroup.add(this.title);
 
     /** STEP 3 **/
     // create the bird sprite
     // and add it to the title group
-    this.bird = this.add.sprite(200,220,'bird');
+    this.bird = this.add.sprite(100,this.ground.y-15,'bird');
+    this.bird.anchor.setTo(0.5,0.5);
     this.titleGroup.add(this.bird);
 
     /** STEP 4 **/
@@ -40,8 +42,8 @@ Menu.prototype = {
 
     /** STEP 5 **/
     // Set the originating location of the group
-    this.titleGroup.x = 30;
-    this.titleGroup.y = 100;
+    // this.titleGroup.x = 30;
+    // this.titleGroup.y = 100;
 
     /** STEP 6 **/
     //  create an oscillating animation tween for the group
