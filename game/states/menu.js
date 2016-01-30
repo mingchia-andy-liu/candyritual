@@ -42,8 +42,8 @@ Menu.prototype = {
     /** STEP 4 **/
     // add an animation to the char1
     // and begin the animation
-    this.char1.animations.add('flap');
-    this.char1.animations.play('flap', 12, true);
+    this.char1.animations.add('walk');
+    this.char1.animations.play('walk', 12, true);
 
     /** STEP 5 **/
     // Set the originating location of the group

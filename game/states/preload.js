@@ -27,6 +27,7 @@ Preload.prototype = {
     this.load.image('startButton', 'assets/start-button.png');
     this.load.spritesheet('heart', 'assets/hearts.png', 21, 21, 1);
     this.load.image('missile', 'assets/char1.png');
+    this.load.image('firstaid', 'assets/firstaid.png');
 
     //TODO: UPDATE INSTRUCTIONS
     // this.load.image('instructions', 'assets/instructions.png');
