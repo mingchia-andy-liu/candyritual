@@ -43,6 +43,11 @@ Play.prototype = {
     //create and add new Enemy object
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
+
+    // create and add a new Trap object
+    this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
+    this.game.add.existing(this.trap);
+
     this.setUpEnemyKeyListeners();
 
     // add mouse/touch controls
@@ -91,6 +96,12 @@ Play.prototype = {
 
     if (this.bird.x < 20) {
       this.deathHandler();
+    }
+
+    if (isNaN(this.trap.x) || this.trap.x < 20) {
+      this.trap.x = this.game.width + 20;
+      this.trap.y = this.game.rnd.integerInRange(0, this.game.height);
+      this.trap.body.velocity.x = 0;
     }
 
 
@@ -209,17 +220,10 @@ Play.prototype = {
 
     this.enemyGKey = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
     this.enemyGKey.onDown.add(this.generateLazer, this);
-  },
-    generateTraps: function() {
-    var trapY = this.game.rnd.integerInRange(-100, 100);
-    // var trapGroup = this.traps.getFirstExists(false);
-    // if(!trapGroup) {
-    var trapGroup = new TrapGroup(this.game, this.traps, 3);
-    // }
-    // trapGroup.reset(this.game.width, trapY);
 
-
-  },
+    this.shot = this.input.keyboard.addKey(Phaser.Keyboard.T);
+    this.shot.onDown.add(this.trap.shoot, this.trap);
+  }
 
 
 };
