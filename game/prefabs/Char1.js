@@ -6,8 +6,9 @@ var Char1 = function(game, x, y, frame) {
   this.scale.x = 2;
   this.scale.y = 2;
   this.anchor.setTo(0.5, 0.5);
-  this.animations.add('flap');
-  this.animations.play('flap', 12, true);
+  this.animations.add('walk', [9,10], 10,true);
+  this.animations.play('walk');
+  // this.animations.add('duck', [3], 10, true);
 
   this.flapSound = this.game.add.audio('flap');
 
@@ -55,6 +56,12 @@ Char1.prototype.moveLeft = function() {
 Char1.prototype.moveRight = function() {
   if (!!this.alive) {
     this.body.velocity.x = 200;
+  }
+};
+
+Char1.prototype.moveDown = function() {
+  if (!!this.alive) {
+    // this.animations.play('duck');
   }
 };
 
