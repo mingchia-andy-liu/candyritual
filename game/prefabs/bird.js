@@ -43,7 +43,7 @@ Bird.prototype.update = function() {
 };
 
 Bird.prototype.flap = function() {
-  if(!!this.alive) {
+  if(!!this.alive && this.body.touching.down) {
     this.flapSound.play();
     //cause our bird to "jump" upward
     this.body.velocity.y = -600;
