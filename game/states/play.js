@@ -18,36 +18,20 @@ Play.prototype = {
     this.game.physics.arcade.gravity.y = 1200;
 
     // add the background sprite
-    this.background = this.game.add.sprite(0,0,'background');
+    this.background = this.game.add.tileSprite(0,-50,840,420,'background');
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
 
-    // create and add a new Bird object
-    this.bird = new Bird(this.game, 100, this.game.height/2);
-    this.game.add.existing(this.bird);
-
-
-
     // create and add a new Ground object
-    this.ground = new Ground(this.game, 0, 400, 335, 112);
+    this.ground = new Ground(this.game, 0, 350, 840, 420);
     this.game.add.existing(this.ground);
 
+    // create and add a new Bird object
+    this.bird = new Bird(this.game, 100, this.ground.y-15);
+    this.game.add.existing(this.bird);
 
     this.setUpKeyListerners();
-
-    // this.cursors = this.game.input.keyboard.createCursorKeys();
-
-    // if (this.cursors.left.isDown) {
-    //     this.bird.moveLeft();
-    //     console.log("left");
-    // }
-
-    // if (this.cursors.right.isDown) {
-    //     this.bird.moveRight();
-    //     console.log("right");
-    // }
-
 
     // add mouse/touch controls
     this.game.input.onDown.addOnce(this.startGame, this);
@@ -80,6 +64,7 @@ Play.prototype = {
   update: function() {
     // enable collisions between the bird and the ground
     // this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
+    this.game.physics.arcade.collide(this.bird, this.ground);
 
     if(!this.gameover) {
         // enable collisions between the bird and each group in the pipes group
