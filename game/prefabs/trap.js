@@ -28,14 +28,11 @@ Trap.prototype.update = function() {
   // check to see if our angle is less than 90
   // if it is rotate the bird towards the ground by 2.5 degrees
   this.angle += 100;
+
 };
 
 Trap.prototype.shoot = function() {
-  if(!!this.alive) {
-    // this.flapSound.play();
-    //cause our bird to "jump" upward
     this.body.velocity.x = -500;
-  }
 };
 
 module.exports = Trap;

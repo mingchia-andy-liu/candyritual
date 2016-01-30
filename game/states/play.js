@@ -21,6 +21,7 @@ Play.prototype = {
 
     // add the background sprite
     this.background = this.game.add.tileSprite(0,-50,840,420,'background');
+    this.healthBar = this.game.add.sprite(0, 0, 'healthBar');
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
@@ -47,10 +48,8 @@ Play.prototype = {
     this.game.input.onDown.addOnce(this.startGame, this);
     this.game.input.onDown.add(this.bird.flap, this.bird);
 
-
     // keep the spacebar from propogating up to the browser
     this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
-
 
 
     this.score = 0;
@@ -75,7 +74,7 @@ Play.prototype = {
     // enable collisions between the bird and the ground
     // this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
     this.game.physics.arcade.collide(this.bird, this.ground);
-    this.game.physics.arcade.collide(this.bird, this.trap, this.deathHandler, null, this);
+    this.game.physics.arcade.collide(this.bird, this.trap, this.damageHandler, null, this);
 
     if(!this.gameover) {
       // enable collisions between the bird and each group in the pipes group
@@ -122,6 +121,16 @@ Play.prototype = {
       this.scoreSound.play();
     }
   },
+  damageHandler: function(bird, enemy) {
+    this.bird.takeDamage();
+    enemy.kill();
+
+    //TODO: Damage animation / sprite when taking damage
+
+    if (this.bird.getHealth() <= 0) {
+        this.deathHandler();
+    }
+  },
   deathHandler: function(bird, enemy) {
     if(!this.gameover) {
       this.groundHitSound.play();
@@ -140,9 +149,9 @@ Play.prototype = {
     var pipeY = this.game.rnd.integerInRange(-100, 100);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-      // pipeGroup = new PipeGroup(this.game, this.pipes);
+      pipeGroup = new PipeGroup(this.game, this.pipes);
     }
-    // pipeGroup.reset(this.game.width, pipeY);
+    pipeGroup.reset(this.game.width, pipeY);
 
 
   },

@@ -10,6 +10,7 @@ var Bird = function(game, x, y, frame) {
 
   this.name = 'bird';
   this.alive = false;
+  this.health = 2;
 
   // enable physics on the bird
   // and disable gravity on the bird
@@ -64,6 +65,14 @@ Bird.prototype.moveRight = function() {
 
 Bird.prototype.revived = function() {
 };
+
+Bird.prototype.takeDamage = function() {
+  this.health--;
+};
+
+Bird.prototype.getHealth = function() {
+  return this.health;
+}
 
 Bird.prototype.onKilled = function() {
   this.exists = true;
