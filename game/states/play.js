@@ -7,7 +7,6 @@ var Pipe = require('../prefabs/pipe');
 var PipeGroup = require('../prefabs/pipeGroup');
 var Scoreboard = require('../prefabs/scoreboard');
 var Trap = require('../prefabs/trap');
-var TrapGroup = require('../prefabs/trapGroup');
 
 function Play() {
 }
@@ -25,36 +24,33 @@ Play.prototype = {
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
-    this.traps = this.game.add.group();
-
+    
     // create and add a new Bird object
-    this.bird = new Bird(this.game, 100, this.ground.y - 15);
+    this.bird = new Bird(this.game, 100, this.game.height/2);
     this.game.add.existing(this.bird);
-
-    // create and add a new Trap object
-    this.trap = new Trap(this.game, this.game.width, this.game.height/2);
-    this.game.add.existing(this.trap);
-
 
     // create and add a new Ground object
     this.ground = new Ground(this.game, 0, 350, 840, 420);
     this.game.add.existing(this.ground);
+    
+
+    // create and add a new Trap object
+    this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
+    this.game.add.existing(this.trap);
+
+    // create and add a new Bird object
+    this.bird = new Bird(this.game, 100, this.ground.y-15);
+    this.game.add.existing(this.bird);
 
     this.setUpKeyListerners();
+    // add keyboard controls
 
-    this.masterShotKey = this.input.keyboard.addKey(Phaser.Keyboard.G);
-    this.masterShotKey.onDown.addOnce(this.startGame, this);
-    this.masterShotKey.onDown.add(function() {this.trap.shoot(-500)}, this);
-
-    this.trapGenerator = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    this.trapGenerator.onDown.addOnce(this.startGame, this);
-    this.trapGenerator.onDown.add(this.generateTraps, this.traps);
 
     //create and add new Enemy object
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
     this.setUpEnemyKeyListeners();
-
+    
     // add mouse/touch controls
     this.game.input.onDown.addOnce(this.startGame, this);
     this.game.input.onDown.add(this.bird.flap, this.bird);
@@ -100,6 +96,11 @@ Play.prototype = {
       this.deathHandler();
     }
 
+    if (isNaN(this.trap.x) || this.trap.x < 20) {
+        this.trap.x = this.game.width + 20;
+        this.trap.y = this.game.rnd.integerInRange(0, this.game.height);
+        this.trap.body.velocity.x = 0;
+    }
 
 
   },
@@ -143,12 +144,12 @@ Play.prototype = {
 
   },
   generatePipes: function() {
-    var pipeY = this.game.rnd.integerInRange(0, 50);
+    var pipeY = this.game.rnd.integerInRange(-100, 100);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-      pipeGroup = new PipeGroup(this.game, this.pipes);
+      // pipeGroup = new PipeGroup(this.game, this.pipes);
     }
-    pipeGroup.reset(this.game.width, pipeY);
+    // pipeGroup.reset(this.game.width, pipeY);
 
 
   },
@@ -166,6 +167,10 @@ Play.prototype = {
 
     this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
     this.downKey.onDown.add(this.bird.moveDown, this.bird);
+
+    this.shot = this.input.keyboard.addKey(Phaser.Keyboard.T);
+    this.shot.onDown.addOnce(this.startGame, this);
+    this.shot.onDown.add(this.trap.shoot, this.trap);
   },
   setUpEnemyKeyListeners: function() {
     // add enemy keyboard controls
@@ -180,18 +185,8 @@ Play.prototype = {
 
     this.enemyDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     this.enemyDownKey.onDown.add(this.enemy.moveDown, this.enemy);
-  },
-    generateTraps: function() {
-    var trapY = this.game.rnd.integerInRange(-100, 100);
-    // var trapGroup = this.traps.getFirstExists(false);
-    // if(!trapGroup) {
-    var trapGroup = new TrapGroup(this.game, this.traps, 3);
-    // }
-    // trapGroup.reset(this.game.width, trapY);
-
   }
-
-
+  
 };
 
 module.exports = Play;
