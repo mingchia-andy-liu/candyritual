@@ -24,27 +24,19 @@ Play.prototype = {
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
-    
-    // create and add a new Bird object
-    this.bird = new Bird(this.game, 100, this.game.height/2);
-    this.game.add.existing(this.bird);
 
     // create and add a new Ground object
     this.ground = new Ground(this.game, 0, 350, 840, 420);
     this.game.add.existing(this.ground);
-    
 
     // create and add a new Trap object
     this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
     this.game.add.existing(this.trap);
 
     // create and add a new Bird object
-    this.bird = new Bird(this.game, 100, this.ground.y-15);
+    this.bird = new Bird(this.game, 100, this.ground.y - 15);
     this.game.add.existing(this.bird);
-
     this.setUpKeyListerners();
-    // add keyboard controls
-
 
     //create and add new Enemy object
     this.enemy = new Enemy(this.game, 700, 200);
