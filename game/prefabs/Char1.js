@@ -13,7 +13,7 @@ var Char1 = function(game, x, y, frame) {
 
   this.name = 'char1';
   this.alive = false;
-  this.health = 2;
+  this.health = 3;
 
   // enable physics on the char1
   // and disable gravity on the char1
@@ -35,10 +35,6 @@ Char1.prototype.constructor = Char1;
 Char1.prototype.update = function() {
   // check to see if our angle is less than 90
   // if it is rotate the Char1 towards the ground by 2.5 degrees
-  if(this.angle < 90 && this.alive) {
-    this.angle += 2.5;
-  }
-
   if(!this.alive) {
     this.body.velocity.x = 0;
   }
