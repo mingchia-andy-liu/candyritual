@@ -14,7 +14,6 @@ var Lazer = function(game, x, y, frame) {
   this.time = this.game.time.create(false);
   this.time.start();
   this.count = 0;
-
   this.time.loop(2000, this.activate, this);
 };
 
@@ -23,7 +22,6 @@ Lazer.prototype.constructor = Lazer;
 
 Lazer.prototype.update = function() {
   this.checkWorldBounds();
-
 };
 
 Lazer.prototype.checkWorldBounds = function() {
