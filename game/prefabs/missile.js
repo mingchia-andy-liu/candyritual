@@ -1,6 +1,6 @@
 'use strict';
 
-var Trap = function(game, x, y, frame) {
+var Missile = function(game, x, y, frame) {
   Phaser.Sprite.call(this, game, x, y, 'pipe', frame);
   this.anchor.setTo(0.5, 0.5);
   this.animations.add('shot');
@@ -21,19 +21,19 @@ var Trap = function(game, x, y, frame) {
   
 };
 
-Trap.prototype = Object.create(Phaser.Sprite.prototype);
-Trap.prototype.constructor = Trap;
+Missile.prototype = Object.create(Phaser.Sprite.prototype);
+Missile.prototype.constructor = Missile;
 
-Trap.prototype.update = function() {
+Missile.prototype.update = function() {
   // check to see if our angle is less than 90
   // if it is rotate the bird towards the ground by 2.5 degrees
   this.angle += 100;
 
 };
 
-Trap.prototype.shoot = function() {
+Missile.prototype.shoot = function() {
     this.body.velocity.x = -500;
 };
 
-module.exports = Trap;
+module.exports = Missile;
 

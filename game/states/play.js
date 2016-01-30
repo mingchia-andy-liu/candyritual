@@ -6,10 +6,17 @@ var Ground = require('../prefabs/ground');
 var Pipe = require('../prefabs/pipe');
 var PipeGroup = require('../prefabs/pipeGroup');
 var Scoreboard = require('../prefabs/scoreboard');
-var Trap = require('../prefabs/trap');
+var Missile = require('../prefabs/missile');
 var Lazer = require('../prefabs/traps/lazer');
 var Platform = require('../prefabs/platform');
-var PlatformGroup = require('../prefabs/platformGroup')
+var PlatformGroup = require('../prefabs/platformGroup');
+
+var DEBUFF_TIMER = {
+  lazerFireEvent: 8,
+  missileFireEvent: 10,
+  
+};
+
 
 function Play() {
 }
@@ -43,10 +50,6 @@ Play.prototype = {
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
 
-    // create and add a new Trap object
-    this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
-    this.game.add.existing(this.trap);
-
     this.setUpEnemyKeyListeners();
 
     // add mouse/touch controls
@@ -79,10 +82,6 @@ Play.prototype = {
     // this.groundHitSound = this.game.add.audio('groundHit');
     // this.scoreSound = this.game.add.audio('score');
 
-this.trapEvents = {
-  lazerFireEvent: 8,
-  
-};
 
   },
   update: function() {
@@ -108,19 +107,12 @@ this.trapEvents = {
       this.deathHandler();
     }
 
-    if (isNaN(this.trap.x) || this.trap.x < 20) {
-      this.trap.x = this.game.width + 20;
-      this.trap.y = this.game.rnd.integerInRange(0, this.game.height);
-      this.trap.body.velocity.x = 0;
-    }
-
-
-
   },
   shutdown: function() {
     this.game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
     this.bird.destroy();
     this.pipes.destroy();
+    this.platforms.destroy();
     this.scoreboard.destroy();
   },
   startGame: function() {
@@ -131,7 +123,7 @@ this.trapEvents = {
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
-      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.5, this.generatePlatforms, this);
+      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
       this.instructionGroup.destroy();
@@ -186,13 +178,24 @@ this.trapEvents = {
     // pipeGroup.reset(this.game.width, pipeY);
   },
   generateLazer: function() {
-    if (!this.lazer || this.game.time.totalElapsedSeconds() > this.lazerFireEvent) {
+    if (!this.lazer || this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lazerFireEvent) {
       console.log(this.game.time.totalElapsedSeconds());
       var lazerY = this.game.rnd.integerInRange(0, 500);
       // create and add a new lazer object
       this.lazer = new Lazer(this.game, this.game.width-25, lazerY);
       this.game.add.existing(this.lazer);
-      this.trapEvents.lazerFireEvent = 8 + this.game.time.totalElapsedSeconds();
+      DEBUFF_TIMER.lazerFireEvent = 8 + this.game.time.totalElapsedSeconds();
+    }
+  },
+  generateMissile: function() {
+    if (!this.missile || this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.missileFireEvent) {
+        console.log("this total for missile: " + DEBUFF_TIMER.missileFireEvent);
+        var missileY = this.game.rnd.integerInRange(0, 300);
+
+        this.missile = new Missile(this.game, this.game.width+30, missileY);
+        this.game.add.existing(this.missile);
+        this.missile.shoot();
+        DEBUFF_TIMER.missileFireEvent = 10 + this.game.time.totalElapsedSeconds();
     }
   },
   generatePlatforms: function() {
@@ -236,9 +239,17 @@ this.trapEvents = {
     this.enemyGKey.onDown.add(this.generateLazer, this);
 
     this.shot = this.input.keyboard.addKey(Phaser.Keyboard.T);
-    this.shot.onDown.add(this.trap.shoot, this.trap);
-  }
+    this.shot.onDown.add(this.generateMissile, this);
+  },
+  randomLunchDebuff: function() {
+    // add the all the random debuff here
+    // create and add a new Trap object
+    if (!this.trap || this.game.rnd.integerInRange(0,1)%1 == 0) {
+        this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
+        this.game.add.existing(this.trap);
+    }
 
+  }
 
 };
 
