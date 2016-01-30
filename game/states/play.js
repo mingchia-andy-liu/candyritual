@@ -26,7 +26,7 @@ Play.prototype = {
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
     this.traps = this.game.add.group();
-    
+
     // create and add a new Bird object
     this.bird = new Bird(this.game, 100, this.game.height/2);
     this.game.add.existing(this.bird);
@@ -34,7 +34,7 @@ Play.prototype = {
     // create and add a new Trap object
     this.trap = new Trap(this.game, this.game.width, this.game.height/2);
     this.game.add.existing(this.trap);
-    
+
 
     // create and add a new Ground object
     this.ground = new Ground(this.game, 0, 350, 840, 420);
@@ -50,19 +50,19 @@ Play.prototype = {
     this.flapKey.onDown.addOnce(this.startGame, this);
     this.flapKey.onDown.add(this.bird.flap, this.bird);
 
-    this.masterShotKey = this.input.keyboard.addKey(Phaser.Keyboard.UP);
+    this.masterShotKey = this.input.keyboard.addKey(Phaser.Keyboard.G);
     this.masterShotKey.onDown.addOnce(this.startGame, this);
-    this.masterShotKey.onDown.add(function() {this.trap.shoot(-500)}, this.trap);
-    
+    this.masterShotKey.onDown.add(function() {this.trap.shoot(-500)}, this);
+
     this.trapGenerator = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     this.trapGenerator.onDown.addOnce(this.startGame, this);
     this.trapGenerator.onDown.add(this.generateTraps, this.traps);
-    
+
     //create and add new Enemy object
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
     this.setUpEnemyKeyListeners();
-    
+
     // add mouse/touch controls
     this.game.input.onDown.addOnce(this.startGame, this);
     this.game.input.onDown.add(this.bird.flap, this.bird);
@@ -100,7 +100,7 @@ Play.prototype = {
       // enable collisions between the bird and each group in the pipes group
       this.pipes.forEach(function(pipeGroup) {
         this.checkScore(pipeGroup);
-        this.game.physics.arcade.collide(this.bird, pipeGroup, this.deathHandler, null, this);
+        this.game.physics.arcade.collide(this.bird, pipeGroup);
       }, this);
     }
 
@@ -151,12 +151,12 @@ Play.prototype = {
 
   },
   generatePipes: function() {
-    var pipeY = this.game.rnd.integerInRange(-100, 100);
+    var pipeY = this.game.rnd.integerInRange(0, 50);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-      // pipeGroup = new PipeGroup(this.game, this.pipes);
+      pipeGroup = new PipeGroup(this.game, this.pipes);
     }
-    // pipeGroup.reset(this.game.width, pipeY);
+    pipeGroup.reset(this.game.width, pipeY);
 
 
   },
@@ -193,13 +193,13 @@ Play.prototype = {
     var trapY = this.game.rnd.integerInRange(-100, 100);
     // var trapGroup = this.traps.getFirstExists(false);
     // if(!trapGroup) {
-    var trapGroup = new TrapGroup(this.game, this.traps, 3);  
+    var trapGroup = new TrapGroup(this.game, this.traps, 3);
     // }
     // trapGroup.reset(this.game.width, trapY);
-    
+
   }
-  
-  
+
+
 };
 
 module.exports = Play;
