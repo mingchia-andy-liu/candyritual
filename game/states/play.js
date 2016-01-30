@@ -33,7 +33,9 @@ Play.prototype = {
 
     // add the background sprite
     this.background = this.game.add.tileSprite(0,-50,840,420,'background');
-    this.healthBar = this.game.add.sprite(0, 0, 'healthBar');
+    this.healthBar1 = this.game.add.sprite(0, 0, 'healthBar');
+    this.healthBar2 = this.game.add.sprite(50, 0, 'healthBar');
+    this.healthBar3 = this.game.add.sprite(100, 0, 'healthBar');
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
@@ -150,6 +152,7 @@ Play.prototype = {
     }
   },
   damageHandler: function(bird, enemy) {
+    this.updateHealth('DOWN');
     this.bird.takeDamage();
     enemy.kill();
 
@@ -157,6 +160,27 @@ Play.prototype = {
 
     if (this.bird.getHealth() <= 0) {
       this.deathHandler();
+    }
+  },
+  updateHealth: function(value) {
+    if (this.bird.getHealth() === 2 && value === 'UP') {
+        this.healthBar3.visible = true;
+    }
+
+    if (this.bird.getHealth() === 2 && value === 'DOWN') {
+        this.healthBar2.visible = false;
+    }
+
+    if (this.bird.getHealth() === 1 && value === 'UP') {
+        this.healthBar2.visible = true;
+    }
+
+    if (this.bird.getHealth() === 1 && value === 'DOWN') {
+        this.healthBar1.visible = false;
+    }
+
+    if (this.bird.getHealth() === 3 && value === 'DOWN') {
+        this.healthBar3.visible = false;
     }
   },
   lazerHandler: function(bird, enemy) {
