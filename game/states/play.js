@@ -67,15 +67,15 @@ Play.prototype = {
     this.game.physics.arcade.collide(this.bird, this.ground);
 
     if(!this.gameover) {
-        // enable collisions between the bird and each group in the pipes group
-        this.pipes.forEach(function(pipeGroup) {
-            this.checkScore(pipeGroup);
-            this.game.physics.arcade.collide(this.bird, pipeGroup, this.deathHandler, null, this);
-        }, this);
+      // enable collisions between the bird and each group in the pipes group
+      this.pipes.forEach(function(pipeGroup) {
+        this.checkScore(pipeGroup);
+        this.game.physics.arcade.collide(this.bird, pipeGroup, this.deathHandler, null, this);
+      }, this);
     }
 
     if (this.bird.x < 20) {
-        this.deathHandler();
+      this.deathHandler();
     }
 
 
@@ -89,40 +89,34 @@ Play.prototype = {
   },
   startGame: function() {
     if(!this.bird.alive && !this.gameover) {
-        this.bird.body.allowGravity = true;
-        this.bird.alive = true;
-        // add a timer
-        this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
-        this.pipeGenerator.timer.start();
+      this.bird.body.allowGravity = true;
+      this.bird.alive = true;
+      // add a timer
+      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
+      this.pipeGenerator.timer.start();
 
-        this.instructionGroup.destroy();
+      this.instructionGroup.destroy();
     }
   },
   checkScore: function(pipeGroup) {
     if(pipeGroup.exists && !pipeGroup.hasScored && pipeGroup.topPipe.world.x <= this.bird.world.x) {
-        pipeGroup.hasScored = true;
-        this.score++;
-        this.scoreText.setText(this.score.toString());
-        this.scoreSound.play();
+      pipeGroup.hasScored = true;
+      this.score++;
+      this.scoreText.setText(this.score.toString());
+      this.scoreSound.play();
     }
   },
   deathHandler: function(bird, enemy) {
-    if(enemy instanceof Ground && !this.bird.onGround) {
-        this.groundHitSound.play();
-        this.scoreboard = new Scoreboard(this.game);
-        this.game.add.existing(this.scoreboard);
-        this.scoreboard.show(this.score);
-        this.bird.onGround = true;
-    } else if (enemy instanceof Pipe){
-        this.pipeHitSound.play();
-    }
-
     if(!this.gameover) {
-        this.gameover = true;
-        this.bird.kill();
-        this.pipes.callAll('stop');
-        this.pipeGenerator.timer.stop();
-        this.ground.stopScroll();
+      this.groundHitSound.play();
+      this.scoreboard = new Scoreboard(this.game);
+      this.game.add.existing(this.scoreboard);
+      this.scoreboard.show(this.score);
+      this.gameover = true;
+      this.bird.kill();
+      this.pipes.callAll('stop');
+      this.pipeGenerator.timer.stop();
+      this.ground.stopScroll();
     }
 
   },
@@ -130,7 +124,7 @@ Play.prototype = {
     var pipeY = this.game.rnd.integerInRange(-100, 100);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-        // pipeGroup = new PipeGroup(this.game, this.pipes);
+      // pipeGroup = new PipeGroup(this.game, this.pipes);
     }
     // pipeGroup.reset(this.game.width, pipeY);
 
