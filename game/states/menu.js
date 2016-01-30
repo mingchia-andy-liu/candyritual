@@ -31,6 +31,8 @@ Menu.prototype = {
     // create the char1 sprite
     // and add it to the title group
     this.char1 = this.add.sprite(100,this.ground.y-15,'char1');
+    this.char1.scale.x = 2;
+    this.char1.scale.y = 2;
     this.char1.anchor.setTo(0.5,0.5);
     this.titleGroup.add(this.char1);
 
