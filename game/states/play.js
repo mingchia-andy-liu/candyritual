@@ -74,6 +74,10 @@ Play.prototype = {
     this.groundHitSound = this.game.add.audio('groundHit');
     this.scoreSound = this.game.add.audio('score');
 
+this.trapEvents = {
+  lazerFireEvent: 8,
+};
+
   },
   update: function() {
     // enable collisions between the bird and the ground
@@ -142,7 +146,7 @@ Play.prototype = {
     //TODO: Damage animation / sprite when taking damage
 
     if (this.bird.getHealth() <= 0) {
-        this.deathHandler();
+      this.deathHandler();
     }
   },
   lazerHandler: function(bird, enemy) {
@@ -176,10 +180,14 @@ Play.prototype = {
     // pipeGroup.reset(this.game.width, pipeY);
   },
   generateLazer: function() {
-    var lazerY = this.game.rnd.integerInRange(0, 500);
-    // create and add a new lazer object
-    this.lazer = new Lazer(this.game, this.game.width-25, lazerY);
-    this.game.add.existing(this.lazer);
+    if (!this.lazer || this.game.time.totalElapsedSeconds() > this.lazerFireEvent) {
+      console.log(this.game.time.totalElapsedSeconds());
+      var lazerY = this.game.rnd.integerInRange(0, 500);
+      // create and add a new lazer object
+      this.lazer = new Lazer(this.game, this.game.width-25, lazerY);
+      this.game.add.existing(this.lazer);
+      this.events.lazerFireEvent = 8 + this.game.time.totalElapsedSeconds();
+    }
   },
   generatePlatforms: function() {
     var platformY = this.game.rnd.integerInRange(100, 200);
