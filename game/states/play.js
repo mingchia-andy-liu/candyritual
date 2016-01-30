@@ -10,6 +10,7 @@ var Missile = require('../prefabs/traps/missile');
 var Lazer = require('../prefabs/traps/lazer');
 var Platform = require('../prefabs/platform');
 var PlatformGroup = require('../prefabs/platformGroup');
+var Lava = require('../prefabs/traps/lava.js')
 
 var DEBUFF_TIMER = {
   lazerFireEvent: 8,
@@ -52,6 +53,9 @@ Play.prototype = {
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
 
+    this.lava = new Lava(this.game, this.game.width, this.ground.body.y - 5);
+    this.game.add.existing(this.lava);
+
     this.setUpEnemyKeyListeners();
 
     // add mouse/touch controls
@@ -91,6 +95,7 @@ Play.prototype = {
     this.game.physics.arcade.collide(this.bird, this.ground);
     this.game.physics.arcade.collide(this.bird, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.bird, this.trap, this.damageHandler, null, this);
+    this.game.physics.arcade.collide(this.bird, this.lava, this.deathHandler, null, this);
 
     if(!this.gameover) {
       // enable collisions between the bird and each group in the pipes group
@@ -106,6 +111,12 @@ Play.prototype = {
 
     if (this.bird.x < 20) {
       this.deathHandler();
+    }
+
+    // console.log(this.game.rnd.integerInRange(0,200)% 99 == 1);
+    if ( this.lava.body.x < -192 && this.game.rnd.integerInRange(0,300)% 300 == 0) {
+        console.log("in");
+        this.lava.reset();
     }
 
   },
@@ -165,6 +176,8 @@ Play.prototype = {
       this.gameover = true;
       this.bird.kill();
       this.pipes.callAll('stop');
+      this.platforms.callAll('stop');
+      this.lava.stop();
       this.pipeGenerator.timer.stop();
       this.ground.stopScroll();
     }
