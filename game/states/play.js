@@ -7,12 +7,9 @@ var Pipe = require('../prefabs/pipe');
 var PipeGroup = require('../prefabs/pipeGroup');
 var Scoreboard = require('../prefabs/scoreboard');
 var Trap = require('../prefabs/trap');
-<<<<<<< HEAD
 var Lazer = require('../prefabs/traps/lazer');
-=======
 var Platform = require('../prefabs/platform');
 var PlatformGroup = require('../prefabs/platformGroup')
->>>>>>> 0f6cad3c32abe319cc45641ba1231a0f70bbe739
 
 function Play() {
 }
@@ -160,7 +157,6 @@ Play.prototype = {
 
   },
   generatePipes: function() {
-<<<<<<< HEAD
     var pipeY = this.game.rnd.integerInRange(0, 50);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
@@ -173,27 +169,14 @@ Play.prototype = {
     // create and add a new lazer object
     this.lazer = new Lazer(this.game, this.game.width-25, lazerY);
     this.game.add.existing(this.lazer);
-    // this.lazer.move();
-=======
-    // var pipeY = this.game.rnd.integerInRange(-100, 100);
-    // var pipeGroup = this.pipes.getFirstExists(false);
-    // if(!pipeGroup) {
-    //   pipeGroup = new PipeGroup(this.game, this.pipes);
-    // }
-    // pipeGroup.reset(this.game.width, pipeY);
-
-
   },
   generatePlatforms: function() {
-    var platformY = this.game.rnd.integerInRange(0, 100);
+    var platformY = this.game.rnd.integerInRange(100, 200);
     var platformGroup = this.platforms.getFirstExists(false);
     if(!platformGroup) {
       platformGroup = new PlatformGroup(this.game, this.platforms);
     }
     platformGroup.reset(this.game.width, platformY);
-
-
->>>>>>> 0f6cad3c32abe319cc45641ba1231a0f70bbe739
   },
   setUpKeyListerners: function() {
     // add keyboard controls
