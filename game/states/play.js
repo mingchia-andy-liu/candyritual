@@ -40,15 +40,7 @@ Play.prototype = {
     this.ground = new Ground(this.game, 0, 350, 840, 420);
     this.game.add.existing(this.ground);
 
-    // create and add a new Bird object
-    this.bird = new Bird(this.game, 100, this.ground.y-15);
-    this.game.add.existing(this.bird);
-
     this.setUpKeyListerners();
-    // add keyboard controls
-    this.flapKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.flapKey.onDown.addOnce(this.startGame, this);
-    this.flapKey.onDown.add(this.bird.flap, this.bird);
 
     this.masterShotKey = this.input.keyboard.addKey(Phaser.Keyboard.G);
     this.masterShotKey.onDown.addOnce(this.startGame, this);
