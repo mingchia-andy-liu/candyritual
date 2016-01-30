@@ -116,7 +116,7 @@ Play.prototype = {
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
-      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.5, this.generatePlatforms, this);
+      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
       this.instructionGroup.destroy();
@@ -165,7 +165,7 @@ Play.prototype = {
 
   },
   generatePlatforms: function() {
-    var platformY = this.game.rnd.integerInRange(0, 100);
+    var platformY = this.game.rnd.integerInRange(100, 200) ;
     var platformGroup = this.platforms.getFirstExists(false);
     if(!platformGroup) {
       platformGroup = new PlatformGroup(this.game, this.platforms);

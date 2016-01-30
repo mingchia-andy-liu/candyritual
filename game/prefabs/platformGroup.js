@@ -6,8 +6,8 @@ var PlatformGroup = function(game, parent) {
 
   Phaser.Group.call(this, game, parent);
 
-  this.topPlatform = new Platform(this.game, 0, 0, 0);
-  this.bottomPlatform = new Platform(this.game, 0, this.game.height/2, 1);
+  this.topPlatform = new Platform(this.game, 320, 0, 0);
+  this.bottomPlatform = new Platform(this.game,  0, 100, 1);
   this.add(this.topPlatform);
   this.add(this.bottomPlatform);
 
@@ -22,8 +22,8 @@ PlatformGroup.prototype.update = function() {
 
 
 PlatformGroup.prototype.reset = function(x, y) {
-  this.topPlatform.reset(0,0);
-  this.bottomPlatform.reset(0,this.game.height/2);
+  this.topPlatform.reset(320,0);
+  this.bottomPlatform.reset(0,100);
   this.x = x;
   this.y = y;
   this.setAll('body.velocity.x', -200);
