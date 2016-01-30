@@ -41,13 +41,9 @@ Bird.prototype.update = function() {
   }
 };
 
-Bird.prototype.flap = function() {
+Bird.prototype.moveUp = function() {
   if(!!this.alive && this.body.touching.down) {
-    this.flapSound.play();
-    //cause our bird to "jump" upward
     this.body.velocity.y = -600;
-    // rotate the bird to -40 degrees
-    this.game.add.tween(this).to({angle: -40}, 100).start();
   }
 };
 
