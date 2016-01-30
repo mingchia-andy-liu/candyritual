@@ -57,7 +57,6 @@ Play.prototype = {
 
     this.instructionGroup = this.game.add.group();
     this.instructionGroup.add(this.game.add.sprite(this.game.width/2, 100,'getReady'));
-    this.instructionGroup.add(this.game.add.sprite(this.game.width/2, 325,'instructions'));
     this.instructionGroup.setAll('anchor.x', 0.5);
     this.instructionGroup.setAll('anchor.y', 0.5);
 
