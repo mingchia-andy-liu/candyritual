@@ -10,11 +10,14 @@ var Missile = require('../prefabs/traps/missile');
 var Lazer = require('../prefabs/traps/lazer');
 var Platform = require('../prefabs/platform');
 var PlatformGroup = require('../prefabs/platformGroup');
+var Lava = require('../prefabs/traps/lava.js')
 
 var DEBUFF_TIMER = {
   lazerFireEvent: 8,
   missileFireEvent: 10,
-  
+  changePlayerControlEvent: { timer: 0,
+    isNormal: true
+  }
 };
 
 
@@ -44,17 +47,19 @@ Play.prototype = {
     this.bird = new Bird(this.game, 100, this.ground.y-15);
     this.game.add.existing(this.bird);
 
-    this.setUpKeyListerners();
+    this.setUpKeyListeners();
 
     //create and add new Enemy object
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
 
+    this.lava = new Lava(this.game, this.game.width, this.ground.body.y - 5);
+    this.game.add.existing(this.lava);
+
     this.setUpEnemyKeyListeners();
 
     // add mouse/touch controls
     this.game.input.onDown.addOnce(this.startGame, this);
-    this.game.input.onDown.add(this.bird.flap, this.bird);
 
     // keep the spacebar from propogating up to the browser
     this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
@@ -90,6 +95,7 @@ Play.prototype = {
     this.game.physics.arcade.collide(this.bird, this.ground);
     this.game.physics.arcade.collide(this.bird, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.bird, this.trap, this.damageHandler, null, this);
+    this.game.physics.arcade.collide(this.bird, this.lava, this.deathHandler, null, this);
 
     if(!this.gameover) {
       // enable collisions between the bird and each group in the pipes group
@@ -105,6 +111,12 @@ Play.prototype = {
 
     if (this.bird.x < 20) {
       this.deathHandler();
+    }
+
+    // console.log(this.game.rnd.integerInRange(0,200)% 99 == 1);
+    if ( this.lava.body.x < -192 && this.game.rnd.integerInRange(0,300)% 300 == 0) {
+        console.log("in");
+        this.lava.reset();
     }
 
   },
@@ -123,7 +135,7 @@ Play.prototype = {
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
-      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.generatePlatforms, this);
+      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 20, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
       this.instructionGroup.destroy();
@@ -164,6 +176,8 @@ Play.prototype = {
       this.gameover = true;
       this.bird.kill();
       this.pipes.callAll('stop');
+      this.platforms.callAll('stop');
+      this.lava.stop();
       this.pipeGenerator.timer.stop();
       this.ground.stopScroll();
     }
@@ -199,19 +213,43 @@ Play.prototype = {
     }
   },
   generatePlatforms: function() {
-    var platformY = this.game.rnd.integerInRange(100, 200);
+    var platformY = this.game.rnd.integerInRange(200, 300);
     var platformGroup = this.platforms.getFirstExists(false);
     if(!platformGroup) {
       platformGroup = new PlatformGroup(this.game, this.platforms);
     }
-    var rnd = this.game.rnd.integerInRange(0,123);
-    platformGroup.reset(this.game.width, platformY, rnd%59, rnd%67);
+    platformGroup.reset(this.game.width, platformY);
   },
-  setUpKeyListerners: function() {
+  changePlayerControl: function(){
+    if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer){
+      DEBUFF_TIMER.changePlayerControlEvent.isNormal = !DEBUFF_TIMER.changePlayerControlEvent.isNormal;
+      this.swapKeyListeners(DEBUFF_TIMER.changePlayerControlEvent.isNormal);
+      DEBUFF_TIMER.changePlayerControlEvent.timer = 3 + this.game.time.totalElapsedSeconds();
+    }
+  },
+  swapKeyListeners: function(bool) {
+    console.log(bool);
+  if (bool) {
+    this.upKey.onDown.remove(this.bird.moveRight,this.bird);
+    this.leftKey.onDown.remove(this.bird.moveUp,this.bird);
+    this.rightKey.onDown.remove(this.bird.moveLeft,this.bird);
+    this.upKey.onDown.add(this.bird.moveUp, this.bird);
+    this.leftKey.onDown.add(this.bird.moveLeft, this.bird);
+    this.rightKey.onDown.add(this.bird.moveRight, this.bird);
+  } else {
+    this.upKey.onDown.remove(this.bird.moveUp,this.bird);
+    this.leftKey.onDown.remove(this.bird.moveLeft,this.bird);
+    this.rightKey.onDown.remove(this.bird.moveRight,this.bird);
+    this.upKey.onDown.add(this.bird.moveRight, this.bird);
+    this.leftKey.onDown.add(this.bird.moveUp, this.bird);
+    this.rightKey.onDown.add(this.bird.moveLeft, this.bird);
+  }
+},
+  setUpKeyListeners: function() {
     // add keyboard controls
-    this.flapKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
-    this.flapKey.onDown.addOnce(this.startGame, this);
-    this.flapKey.onDown.add(this.bird.flap, this.bird);
+    this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    this.upKey.onDown.addOnce(this.startGame, this);
+    this.upKey.onDown.add(this.bird.moveUp, this.bird);
 
     this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     this.leftKey.onDown.add(this.bird.moveLeft, this.bird);
@@ -239,8 +277,20 @@ Play.prototype = {
     this.enemyGKey = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
     this.enemyGKey.onDown.add(this.generateLazer, this);
 
-    this.shot = this.input.keyboard.addKey(Phaser.Keyboard.T);
+    this.shot = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     this.shot.onDown.add(this.generateMissile, this);
+
+    this.changePlayerControlKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
+    this.changePlayerControlKey.onDown.add(this.changePlayerControl, this);
+  },
+  randomLunchDebuff: function() {
+    // add the all the random debuff here
+    // create and add a new Trap object
+    if (!this.trap || this.game.rnd.integerInRange(0,1)%1 == 0) {
+        this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
+        this.game.add.existing(this.trap);
+    }
+
   }
 
 };
