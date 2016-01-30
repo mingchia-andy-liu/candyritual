@@ -7,16 +7,10 @@ _.str = require('underscore.string');
 // Mix in non-conflict functions to Underscore namespace if you want
 _.mixin(_.str.exports());
 
-var LIVERELOAD_PORT = 35729;
-var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
-var mountFolder = function (connect, dir) {
-  return connect.static(require('path').resolve(dir));
-};
- 
 module.exports = function (grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
- 
+
   grunt.initConfig({
     watch: {
       scripts: {
@@ -26,7 +20,7 @@ module.exports = function (grunt) {
         ],
         options: {
           spawn: false,
-          livereload: LIVERELOAD_PORT
+          livereload: true
         },
         tasks: ['build']
       }
@@ -37,17 +31,14 @@ module.exports = function (grunt) {
         // change this to '0.0.0.0' to access the server from outside
         hostname: '0.0.0.0'
       },
-      livereload: {
+      server: {
         options: {
-          middleware: function (connect) {
-            return [
-              lrSnippet,
-              mountFolder(connect, 'dist')
-            ];
-          }
+          port: 9000,
+          base: 'dist'
         }
       }
     },
+
     open: {
       server: {
         path: 'http://localhost:<%= connect.options.port %>'
@@ -66,18 +57,19 @@ module.exports = function (grunt) {
       }
     },
     browserify: {
-      
+
       build: {
         src: ['game/main.js'],
         dest: 'dist/js/game.js'
       }
     }
   });
-  
+
   grunt.registerTask('build', ['buildBootstrapper', 'browserify','copy']);
-  grunt.registerTask('serve', ['build', 'connect:livereload', 'open', 'watch']);
-  grunt.registerTask('default', ['serve']);
+  grunt.registerTask('serve', ['build', 'connect:server', 'open', 'watch']);
   grunt.registerTask('prod', ['build', 'copy']);
+
+  grunt.registerTask('default', ['serve']);
 
   grunt.registerTask('buildBootstrapper', 'builds the bootstrapper file correctly', function() {
     var stateFiles = grunt.file.expand('game/states/*.js');
