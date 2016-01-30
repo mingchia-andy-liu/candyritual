@@ -1,19 +1,22 @@
 'use strict';
 
-var Bird = function(game, x, y, frame) {
-  Phaser.Sprite.call(this, game, x, y, 'bird', frame);
+var Char1 = function(game, x, y, frame) {
+  Phaser.Sprite.call(this, game, x, y, 'char1', frame);
+
+  this.scale.x = 2;
+  this.scale.y = 2;
   this.anchor.setTo(0.5, 0.5);
   this.animations.add('flap');
   this.animations.play('flap', 12, true);
 
   this.flapSound = this.game.add.audio('flap');
 
-  this.name = 'bird';
+  this.name = 'char1';
   this.alive = false;
   this.health = 3;
 
-  // enable physics on the bird
-  // and disable gravity on the bird
+  // enable physics on the char1
+  // and disable gravity on the char1
   // until the game is started
   this.game.physics.arcade.enableBody(this);
   this.body.allowGravity = true;
@@ -26,51 +29,47 @@ var Bird = function(game, x, y, frame) {
 
 };
 
-Bird.prototype = Object.create(Phaser.Sprite.prototype);
-Bird.prototype.constructor = Bird;
+Char1.prototype = Object.create(Phaser.Sprite.prototype);
+Char1.prototype.constructor = Char1;
 
-Bird.prototype.update = function() {
+Char1.prototype.update = function() {
   // check to see if our angle is less than 90
-  // if it is rotate the bird towards the ground by 2.5 degrees
-  if(this.angle < 90 && this.alive) {
-    this.angle += 2.5;
-  }
-
+  // if it is rotate the Char1 towards the ground by 2.5 degrees
   if(!this.alive) {
     this.body.velocity.x = 0;
   }
 };
 
-Bird.prototype.moveUp = function() {
+Char1.prototype.moveUp = function() {
   if(!!this.alive && this.body.touching.down) {
     this.body.velocity.y = -600;
   }
 };
 
-Bird.prototype.moveLeft = function() {
+Char1.prototype.moveLeft = function() {
   if (!!this.alive) {
     this.body.velocity.x = -200;
   }
 };
 
-Bird.prototype.moveRight = function() {
+Char1.prototype.moveRight = function() {
   if (!!this.alive) {
     this.body.velocity.x = 200;
   }
 };
 
-Bird.prototype.revived = function() {
+Char1.prototype.revived = function() {
 };
 
-Bird.prototype.takeDamage = function() {
+Char1.prototype.takeDamage = function() {
   this.health--;
 };
 
-Bird.prototype.getHealth = function() {
+Char1.prototype.getHealth = function() {
   return this.health;
 }
 
-Bird.prototype.onKilled = function() {
+Char1.prototype.onKilled = function() {
   this.exists = true;
   this.visible = true;
   this.animations.stop();
@@ -80,4 +79,4 @@ Bird.prototype.onKilled = function() {
   console.log('alive:', this.alive);
 };
 
-module.exports = Bird;
+module.exports = Char1;

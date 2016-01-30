@@ -28,17 +28,19 @@ Menu.prototype = {
     this.titleGroup.add(this.title);
 
     /** STEP 3 **/
-    // create the bird sprite
+    // create the char1 sprite
     // and add it to the title group
-    this.bird = this.add.sprite(100,this.ground.y-15,'bird');
-    this.bird.anchor.setTo(0.5,0.5);
-    this.titleGroup.add(this.bird);
+    this.char1 = this.add.sprite(100,this.ground.y-15,'char1');
+    this.char1.scale.x = 2;
+    this.char1.scale.y = 2;
+    this.char1.anchor.setTo(0.5,0.5);
+    this.titleGroup.add(this.char1);
 
     /** STEP 4 **/
-    // add an animation to the bird
+    // add an animation to the char1
     // and begin the animation
-    this.bird.animations.add('flap');
-    this.bird.animations.play('flap', 12, true);
+    this.char1.animations.add('flap');
+    this.char1.animations.play('flap', 12, true);
 
     /** STEP 5 **/
     // Set the originating location of the group

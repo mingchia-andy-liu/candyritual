@@ -1,6 +1,6 @@
 
 'use strict';
-var Bird = require('../prefabs/bird');
+var Char1 = require('../prefabs/Char1');
 var Enemy = require('../prefabs/enemy');
 var Ground = require('../prefabs/ground');
 var Pipe = require('../prefabs/pipe');
@@ -33,7 +33,9 @@ Play.prototype = {
 
     // add the background sprite
     this.background = this.game.add.tileSprite(0,-50,840,420,'background');
-    this.healthBar = this.game.add.sprite(0, 0, 'healthBar');
+    this.healthBar1 = this.game.add.sprite(0, 0, 'healthBar');
+    this.healthBar2 = this.game.add.sprite(50, 0, 'healthBar');
+    this.healthBar3 = this.game.add.sprite(100, 0, 'healthBar');
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
@@ -43,9 +45,9 @@ Play.prototype = {
     this.ground = new Ground(this.game, 0, 350, 840, 420);
     this.game.add.existing(this.ground);
 
-    // create and add a new Bird object
-    this.bird = new Bird(this.game, 100, this.ground.y-15);
-    this.game.add.existing(this.bird);
+    // create and add a new Char1 object
+    this.char1 = new Char1(this.game, 100, this.ground.y-25);
+    this.game.add.existing(this.char1);
 
     this.setUpKeyListeners();
 
@@ -90,26 +92,26 @@ Play.prototype = {
 
   },
   update: function() {
-    // enable collisions between the bird and the ground
-    // this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
-    this.game.physics.arcade.collide(this.bird, this.ground);
-    this.game.physics.arcade.collide(this.bird, this.lazer, this.lazerHandler, null, this);
-    this.game.physics.arcade.collide(this.bird, this.trap, this.damageHandler, null, this);
-    this.game.physics.arcade.collide(this.bird, this.lava, this.deathHandler, null, this);
+    // enable collisions between the char1 and the ground
+    // this.game.physics.arcade.collide(this.char1, this.ground, this.deathHandler, null, this);
+    this.game.physics.arcade.collide(this.char1, this.ground);
+    this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
+    this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
+    this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
 
     if(!this.gameover) {
-      // enable collisions between the bird and each group in the pipes group
+      // enable collisions between the char1 and each group in the pipes group
       this.pipes.forEach(function(pipeGroup) {
         this.checkScore(pipeGroup);
-        this.game.physics.arcade.collide(this.bird, pipeGroup);
+        this.game.physics.arcade.collide(this.char1, pipeGroup);
       }, this);
 
       this.platforms.forEach(function(platformGroup) {
-        this.game.physics.arcade.collide(this.bird, platformGroup);
+        this.game.physics.arcade.collide(this.char1, platformGroup);
       }, this);
     }
 
-    if (this.bird.x < 20) {
+    if (this.char1.x < 25) {
       this.deathHandler();
     }
 
@@ -122,15 +124,15 @@ Play.prototype = {
   },
   shutdown: function() {
     this.game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
-    this.bird.destroy();
+    this.char1.destroy();
     this.pipes.destroy();
     this.platforms.destroy();
     this.scoreboard.destroy();
   },
   startGame: function() {
-    if(!this.bird.alive && !this.gameover) {
-      this.bird.body.allowGravity = true;
-      this.bird.alive = true;
+    if(!this.char1.alive && !this.gameover) {
+      this.char1.body.allowGravity = true;
+      this.char1.alive = true;
       // add a timer
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
       this.pipeGenerator.timer.start();
@@ -142,39 +144,61 @@ Play.prototype = {
     }
   },
   checkScore: function(pipeGroup) {
-    if(pipeGroup.exists && !pipeGroup.hasScored && pipeGroup.topPipe.world.x <= this.bird.world.x) {
+    if(pipeGroup.exists && !pipeGroup.hasScored && pipeGroup.topPipe.world.x <= this.char1.world.x) {
       pipeGroup.hasScored = true;
       this.score++;
       this.scoreText.setText(this.score.toString());
       this.sounds.scoreSound.play();
     }
   },
-  damageHandler: function(bird, enemy) {
-    this.bird.takeDamage();
+  damageHandler: function(char1, enemy) {
+    this.updateHealth('DOWN');
+    this.char1.takeDamage();
     enemy.kill();
 
     //TODO: Damage animation / sprite when taking damage
 
-    if (this.bird.getHealth() <= 0) {
+    if (this.char1.getHealth() <= 0) {
       this.deathHandler();
     }
   },
-  lazerHandler: function(bird, enemy) {
+  updateHealth: function(value) {
+    if (this.char1.getHealth() === 2 && value === 'UP') {
+        this.healthBar3.visible = true;
+    }
+
+    if (this.char1.getHealth() === 2 && value === 'DOWN') {
+        this.healthBar2.visible = false;
+    }
+
+    if (this.char1.getHealth() === 1 && value === 'UP') {
+        this.healthBar2.visible = true;
+    }
+
+    if (this.char1.getHealth() === 1 && value === 'DOWN') {
+        this.healthBar1.visible = false;
+    }
+
+    if (this.char1.getHealth() === 3 && value === 'DOWN') {
+        this.healthBar3.visible = false;
+    }
+  },
+  lazerHandler: function(char1, enemy) {
     if (enemy.isHarmful) {
       console.log(enemy.isHarmful);
-      this.damageHandler(bird, enemy);
+      this.damageHandler(char1, enemy);
     } else {
       console.log("IS NOT HARMFUL");
     }
   },
-  deathHandler: function(bird, enemy) {
+  deathHandler: function(char1, enemy) {
     if(!this.gameover) {
       this.sounds.groundHitSound.play();
       this.scoreboard = new Scoreboard(this.game);
       this.game.add.existing(this.scoreboard);
       this.scoreboard.show(this.score);
       this.gameover = true;
-      this.bird.kill();
+      this.char1.kill();
       this.pipes.callAll('stop');
       this.platforms.callAll('stop');
       this.lava.stop();
@@ -230,35 +254,35 @@ Play.prototype = {
   swapKeyListeners: function(bool) {
     console.log(bool);
   if (bool) {
-    this.upKey.onDown.remove(this.bird.moveRight,this.bird);
-    this.leftKey.onDown.remove(this.bird.moveUp,this.bird);
-    this.rightKey.onDown.remove(this.bird.moveLeft,this.bird);
-    this.upKey.onDown.add(this.bird.moveUp, this.bird);
-    this.leftKey.onDown.add(this.bird.moveLeft, this.bird);
-    this.rightKey.onDown.add(this.bird.moveRight, this.bird);
+    this.upKey.onDown.remove(this.char1.moveRight,this.char1);
+    this.leftKey.onDown.remove(this.char1.moveUp,this.char1);
+    this.rightKey.onDown.remove(this.char1.moveLeft,this.char1);
+    this.upKey.onDown.add(this.char1.moveUp, this.char1);
+    this.leftKey.onDown.add(this.char1.moveLeft, this.char1);
+    this.rightKey.onDown.add(this.char1.moveRight, this.char1);
   } else {
-    this.upKey.onDown.remove(this.bird.moveUp,this.bird);
-    this.leftKey.onDown.remove(this.bird.moveLeft,this.bird);
-    this.rightKey.onDown.remove(this.bird.moveRight,this.bird);
-    this.upKey.onDown.add(this.bird.moveRight, this.bird);
-    this.leftKey.onDown.add(this.bird.moveUp, this.bird);
-    this.rightKey.onDown.add(this.bird.moveLeft, this.bird);
+    this.upKey.onDown.remove(this.char1.moveUp,this.char1);
+    this.leftKey.onDown.remove(this.char1.moveLeft,this.char1);
+    this.rightKey.onDown.remove(this.char1.moveRight,this.char1);
+    this.upKey.onDown.add(this.char1.moveRight, this.char1);
+    this.leftKey.onDown.add(this.char1.moveUp, this.char1);
+    this.rightKey.onDown.add(this.char1.moveLeft, this.char1);
   }
 },
   setUpKeyListeners: function() {
     // add keyboard controls
     this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.upKey.onDown.addOnce(this.startGame, this);
-    this.upKey.onDown.add(this.bird.moveUp, this.bird);
+    this.upKey.onDown.add(this.char1.moveUp, this.char1);
 
     this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    this.leftKey.onDown.add(this.bird.moveLeft, this.bird);
+    this.leftKey.onDown.add(this.char1.moveLeft, this.char1);
 
     this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-    this.rightKey.onDown.add(this.bird.moveRight, this.bird);
+    this.rightKey.onDown.add(this.char1.moveRight, this.char1);
 
     this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-    this.downKey.onDown.add(this.bird.moveDown, this.bird);
+    this.downKey.onDown.add(this.char1.moveDown, this.char1);
   },
   setUpEnemyKeyListeners: function() {
     // add enemy keyboard controls
