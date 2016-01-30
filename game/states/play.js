@@ -123,7 +123,7 @@ Play.prototype = {
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
-      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.generatePlatforms, this);
+      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 20, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
       this.instructionGroup.destroy();
@@ -199,13 +199,12 @@ Play.prototype = {
     }
   },
   generatePlatforms: function() {
-    var platformY = this.game.rnd.integerInRange(100, 200);
+    var platformY = this.game.rnd.integerInRange(200, 300);
     var platformGroup = this.platforms.getFirstExists(false);
     if(!platformGroup) {
       platformGroup = new PlatformGroup(this.game, this.platforms);
     }
-    var rnd = this.game.rnd.integerInRange(0,123);
-    platformGroup.reset(this.game.width, platformY, rnd%59, rnd%67);
+    platformGroup.reset(this.game.width, platformY);
   },
   setUpKeyListerners: function() {
     // add keyboard controls
