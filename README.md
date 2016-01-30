@@ -1,5 +1,23 @@
-#Flappy Bird Reborn
-The HTML5 Javascript remix built with [Phaser](http://phaser.io) 2.0 and [generator-phaser-official](http://github.com/codevinsky/generator-phaser-official)
+#Candy Ritual
+Built with Phaser 2.4.4
 
-## Learn to make this game from the ground up
-[Phaser 2.0 Tutorial: Flappy Bird](http://codevinsky.ghost.io/phaser-2-0-tutorial-flappy-bird-part-1/)
+### Branches
+**frontend** 
+
+Phaser and front end development
+
+**backend**
+
+Server side networking & multiplayer development 
+
+**master**
+
+Merges both backend and frontend branches
+
+## How to run
+
+```npm install```
+
+```bower install```
+
+``` grunt ```
