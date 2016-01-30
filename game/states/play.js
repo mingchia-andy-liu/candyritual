@@ -18,7 +18,6 @@ Play.prototype = {
     // start the phaser arcade physics engine
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-
     // give our world an initial gravity of 1200
     this.game.physics.arcade.gravity.y = 1200;
 
@@ -70,12 +69,19 @@ Play.prototype = {
 
     this.gameover = false;
 
-    this.pipeHitSound = this.game.add.audio('pipeHit');
-    this.groundHitSound = this.game.add.audio('groundHit');
-    this.scoreSound = this.game.add.audio('score');
+    this.sounds = {
+      pipeHitSound: this.game.add.audio('pipeHit'),
+      groundHitSound: this.game.add.audio('groundHit'),
+      scoreSound: this.game.add.audio('score')
+    }
+
+    // this.pipeHitSound = this.game.add.audio('pipeHit');
+    // this.groundHitSound = this.game.add.audio('groundHit');
+    // this.scoreSound = this.game.add.audio('score');
 
 this.trapEvents = {
   lazerFireEvent: 8,
+  
 };
 
   },
@@ -136,7 +142,7 @@ this.trapEvents = {
       pipeGroup.hasScored = true;
       this.score++;
       this.scoreText.setText(this.score.toString());
-      this.scoreSound.play();
+      this.sounds.scoreSound.play();
     }
   },
   damageHandler: function(bird, enemy) {
@@ -159,7 +165,7 @@ this.trapEvents = {
   },
   deathHandler: function(bird, enemy) {
     if(!this.gameover) {
-      this.groundHitSound.play();
+      this.sounds.groundHitSound.play();
       this.scoreboard = new Scoreboard(this.game);
       this.game.add.existing(this.scoreboard);
       this.scoreboard.show(this.score);
@@ -186,7 +192,7 @@ this.trapEvents = {
       // create and add a new lazer object
       this.lazer = new Lazer(this.game, this.game.width-25, lazerY);
       this.game.add.existing(this.lazer);
-      this.events.lazerFireEvent = 8 + this.game.time.totalElapsedSeconds();
+      this.trapEvents.lazerFireEvent = 8 + this.game.time.totalElapsedSeconds();
     }
   },
   generatePlatforms: function() {
