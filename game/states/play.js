@@ -163,23 +163,23 @@ Play.prototype = {
     }
   },
   updateHealth: function(value) {
-    if (this.bird.getHealth() === 2 && value === 'UP') {
+    if (this.char1.getHealth() === 2 && value === 'UP') {
         this.healthBar3.visible = true;
     }
 
-    if (this.bird.getHealth() === 2 && value === 'DOWN') {
+    if (this.char1.getHealth() === 2 && value === 'DOWN') {
         this.healthBar2.visible = false;
     }
 
-    if (this.bird.getHealth() === 1 && value === 'UP') {
+    if (this.char1.getHealth() === 1 && value === 'UP') {
         this.healthBar2.visible = true;
     }
 
-    if (this.bird.getHealth() === 1 && value === 'DOWN') {
+    if (this.char1.getHealth() === 1 && value === 'DOWN') {
         this.healthBar1.visible = false;
     }
 
-    if (this.bird.getHealth() === 3 && value === 'DOWN') {
+    if (this.char1.getHealth() === 3 && value === 'DOWN') {
         this.healthBar3.visible = false;
     }
   },
