@@ -10,21 +10,20 @@ var Bird = function(game, x, y, frame) {
 
   this.name = 'bird';
   this.alive = false;
-  this.onGround = false;
-
+  this.health = 2;
 
   // enable physics on the bird
   // and disable gravity on the bird
   // until the game is started
   this.game.physics.arcade.enableBody(this);
-  this.body.allowGravity = false;
+  this.body.allowGravity = true;
   this.body.collideWorldBounds = true;
 
 
   this.events.onKilled.add(this.onKilled, this);
 
-  
-  
+
+
 };
 
 Bird.prototype = Object.create(Phaser.Sprite.prototype);
@@ -35,7 +34,7 @@ Bird.prototype.update = function() {
   // if it is rotate the bird towards the ground by 2.5 degrees
   if(this.angle < 90 && this.alive) {
     this.angle += 2.5;
-  } 
+  }
 
   if(!this.alive) {
     this.body.velocity.x = 0;
@@ -43,7 +42,7 @@ Bird.prototype.update = function() {
 };
 
 Bird.prototype.flap = function() {
-  if(!!this.alive) {
+  if(!!this.alive && this.body.touching.down) {
     this.flapSound.play();
     //cause our bird to "jump" upward
     this.body.velocity.y = -600;
@@ -56,22 +55,24 @@ Bird.prototype.moveLeft = function() {
   if (!!this.alive) {
     this.body.velocity.x = -200;
   }
-}
+};
 
 Bird.prototype.moveRight = function() {
   if (!!this.alive) {
     this.body.velocity.x = 200;
   }
-}
-
-Bird.prototype.moveDown = function() {
-  if (!!this.alive) {
-    this.body.velocity.y = 200;
-  }
-}
-
-Bird.prototype.revived = function() { 
 };
+
+Bird.prototype.revived = function() {
+};
+
+Bird.prototype.takeDamage = function() {
+  this.health--;
+};
+
+Bird.prototype.getHealth = function() {
+  return this.health;
+}
 
 Bird.prototype.onKilled = function() {
   this.exists = true;
@@ -84,4 +85,3 @@ Bird.prototype.onKilled = function() {
 };
 
 module.exports = Bird;
-
