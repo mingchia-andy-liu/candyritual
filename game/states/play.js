@@ -111,7 +111,7 @@ Play.prototype = {
       }, this);
     }
 
-    if (this.char1.x < 20) {
+    if (this.char1.x < 25) {
       this.deathHandler();
     }
 
