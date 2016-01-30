@@ -68,11 +68,29 @@ Bird.prototype.flap = function() {
   if(!!this.alive) {
     this.flapSound.play();
     //cause our bird to "jump" upward
-    this.body.velocity.y = -400;
+    this.body.velocity.y = -600;
     // rotate the bird to -40 degrees
     this.game.add.tween(this).to({angle: -40}, 100).start();
   }
 };
+
+Bird.prototype.moveLeft = function() {
+  if (!!this.alive) {
+    this.body.velocity.x = -200;
+  }
+}
+
+Bird.prototype.moveRight = function() {
+  if (!!this.alive) {
+    this.body.velocity.x = 200;
+  }
+}
+
+Bird.prototype.moveDown = function() {
+  if (!!this.alive) {
+    this.body.velocity.y = 200;
+  }
+}
 
 Bird.prototype.revived = function() { 
 };
@@ -414,9 +432,30 @@ Play.prototype = {
     
 
     // add keyboard controls
-    this.flapKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.flapKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.flapKey.onDown.addOnce(this.startGame, this);
     this.flapKey.onDown.add(this.bird.flap, this.bird);
+
+    this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    this.leftKey.onDown.add(this.bird.moveLeft, this.bird);
+
+    this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    this.rightKey.onDown.add(this.bird.moveRight, this.bird);
+
+    this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+    this.downKey.onDown.add(this.bird.moveDown, this.bird);
+
+    // this.cursors = this.game.input.keyboard.createCursorKeys();
+
+    // if (this.cursors.left.isDown) {
+    //     this.bird.moveLeft();
+    //     console.log("left");
+    // }
+
+    // if (this.cursors.right.isDown) {
+    //     this.bird.moveRight();
+    //     console.log("right");
+    // }
     
 
     // add mouse/touch controls
@@ -449,7 +488,7 @@ Play.prototype = {
   },
   update: function() {
     // enable collisions between the bird and the ground
-    this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
+    // this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
 
     if(!this.gameover) {    
         // enable collisions between the bird and each group in the pipes group
@@ -511,9 +550,9 @@ Play.prototype = {
     var pipeY = this.game.rnd.integerInRange(-100, 100);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-        pipeGroup = new PipeGroup(this.game, this.pipes);  
+        // pipeGroup = new PipeGroup(this.game, this.pipes);  
     }
-    pipeGroup.reset(this.game.width, pipeY);
+    // pipeGroup.reset(this.game.width, pipeY);
     
 
   }

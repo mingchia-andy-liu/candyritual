@@ -35,9 +35,30 @@ Play.prototype = {
     
 
     // add keyboard controls
-    this.flapKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.flapKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.flapKey.onDown.addOnce(this.startGame, this);
     this.flapKey.onDown.add(this.bird.flap, this.bird);
+
+    this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    this.leftKey.onDown.add(this.bird.moveLeft, this.bird);
+
+    this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    this.rightKey.onDown.add(this.bird.moveRight, this.bird);
+
+    this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+    this.downKey.onDown.add(this.bird.moveDown, this.bird);
+
+    // this.cursors = this.game.input.keyboard.createCursorKeys();
+
+    // if (this.cursors.left.isDown) {
+    //     this.bird.moveLeft();
+    //     console.log("left");
+    // }
+
+    // if (this.cursors.right.isDown) {
+    //     this.bird.moveRight();
+    //     console.log("right");
+    // }
     
 
     // add mouse/touch controls
@@ -70,7 +91,7 @@ Play.prototype = {
   },
   update: function() {
     // enable collisions between the bird and the ground
-    this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
+    // this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
 
     if(!this.gameover) {    
         // enable collisions between the bird and each group in the pipes group
@@ -132,9 +153,9 @@ Play.prototype = {
     var pipeY = this.game.rnd.integerInRange(-100, 100);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-        pipeGroup = new PipeGroup(this.game, this.pipes);  
+        // pipeGroup = new PipeGroup(this.game, this.pipes);  
     }
-    pipeGroup.reset(this.game.width, pipeY);
+    // pipeGroup.reset(this.game.width, pipeY);
     
 
   }
