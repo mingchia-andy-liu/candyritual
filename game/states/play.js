@@ -10,11 +10,13 @@ var Missile = require('../prefabs/traps/missile');
 var Lazer = require('../prefabs/traps/lazer');
 var Platform = require('../prefabs/platform');
 var PlatformGroup = require('../prefabs/platformGroup');
-var Lava = require('../prefabs/traps/lava.js')
+var Lava = require('../prefabs/traps/lava');
+var Meteor = require('../prefabs/traps/meteor');
 
 var DEBUFF_TIMER = {
   lazerFireEvent: 8,
   missileFireEvent: 10,
+  meteorsFireEvent:10,
   changePlayerControlEvent: { timer: 0,
     isNormal: true
   }
@@ -46,6 +48,7 @@ Play.prototype = {
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
     this.platforms = this.game.add.group();
+    this.meteors = this.game.add.group();
 
     // create and add a new Ground object
     this.ground = new Ground(this.game, 0, this.game.height-42, 840, 420);
@@ -103,6 +106,7 @@ Play.prototype = {
     // enable collisions between the char1 and the ground
     // this.game.physics.arcade.collide(this.char1, this.ground, this.deathHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.ground);
+    this.game.physics.arcade.collide(this.meteors, this.ground);
     this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
@@ -117,6 +121,10 @@ Play.prototype = {
       this.platforms.forEach(function(platformGroup) {
         this.game.physics.arcade.collide(this.char1, platformGroup);
       }, this);
+
+      this.meteors.forEach(function(Meteor){
+        this.game.physics.arcade.collide(this.char1, Meteor);
+      }, this)
     }
 
     if (this.char1.x < 25) {
@@ -238,7 +246,7 @@ Play.prototype = {
         console.log("this total for missile: " + DEBUFF_TIMER.missileFireEvent);
         var missileY = this.game.rnd.integerInRange(0, 300);
 
-        this.missile = new Missile(this.game, this.game.width+30, missileY);
+        this.missile = new Missile(this.game, this.game.width+30, missileY, 0, "missile");
         this.game.add.existing(this.missile);
         this.missile.shoot();
         DEBUFF_TIMER.missileFireEvent = 10 + this.game.time.totalElapsedSeconds();
@@ -251,6 +259,14 @@ Play.prototype = {
       platformGroup = new PlatformGroup(this.game, this.platforms);
     }
     platformGroup.reset(this.game.width, platformY);
+  },
+  generateMeteors: function() {
+    var meteorsX = this.game.rnd.integerInRange(0, this.game.width);
+    var meteorsGroup = this.meteors.getFirstExists(false);
+    if (!meteorsGroup) {
+        meteorsGroup = new Meteor(this.game, this.meteors);
+    }
+    meteorsGroup.reset(meteorsX, meteorsX/13);
   },
   changePlayerControl: function(){
     if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer){
@@ -312,17 +328,11 @@ Play.prototype = {
     this.shot = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     this.shot.onDown.add(this.generateMissile, this);
 
+    this.meteorsKey = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
+    this.meteorsKey.onDown.add(this.generateMeteors, this);
+
     this.changePlayerControlKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
     this.changePlayerControlKey.onDown.add(this.changePlayerControl, this);
-  },
-  randomLunchDebuff: function() {
-    // add the all the random debuff here
-    // create and add a new Trap object
-    if (!this.trap || this.game.rnd.integerInRange(0,1)%1 == 0) {
-        this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
-        this.game.add.existing(this.trap);
-    }
-
   }
 
 };
