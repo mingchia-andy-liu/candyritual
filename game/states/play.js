@@ -74,6 +74,10 @@ Play.prototype = {
         }, this);
     }
 
+    if (this.bird.x < 20) {
+        this.deathHandler();
+    }
+
 
 
   },
