@@ -53,11 +53,15 @@ Bird.prototype.flap = function() {
 };
 
 Bird.prototype.moveLeft = function() {
-  this.body.velocity.x = -200;
+  if (!!this.alive) {
+    this.body.velocity.x = -200;
+  }
 };
 
 Bird.prototype.moveRight = function() {
-  this.body.velocity.x = 200;
+  if (!!this.alive) {
+    this.body.velocity.x = 200;
+  }
 };
 
 Bird.prototype.revived = function() {
