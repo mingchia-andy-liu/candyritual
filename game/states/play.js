@@ -151,14 +151,9 @@ Play.prototype = {
       this.sounds.scoreSound.play();
     }
   },
-<<<<<<< Updated upstream
-  damageHandler: function(bird, enemy) {
-    this.updateHealth('DOWN');
-    this.bird.takeDamage();
-=======
   damageHandler: function(char1, enemy) {
+    this.updateHealth('DOWN');
     this.char1.takeDamage();
->>>>>>> Stashed changes
     enemy.kill();
 
     //TODO: Damage animation / sprite when taking damage
@@ -167,7 +162,6 @@ Play.prototype = {
       this.deathHandler();
     }
   },
-<<<<<<< Updated upstream
   updateHealth: function(value) {
     if (this.bird.getHealth() === 2 && value === 'UP') {
         this.healthBar3.visible = true;
@@ -189,10 +183,7 @@ Play.prototype = {
         this.healthBar3.visible = false;
     }
   },
-  lazerHandler: function(bird, enemy) {
-=======
   lazerHandler: function(char1, enemy) {
->>>>>>> Stashed changes
     if (enemy.isHarmful) {
       console.log(enemy.isHarmful);
       this.damageHandler(char1, enemy);
