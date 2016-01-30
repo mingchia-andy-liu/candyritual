@@ -25,7 +25,7 @@ Lava.prototype.stop = function() {
 }
 
 Lava.prototype.reset = function() {
-	this.body.x = this.game.width;
+	this.body.x = this.game.width + this.body.width;
 }
 
 module.exports = Lava;

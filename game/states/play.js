@@ -19,6 +19,7 @@ var DEBUFF_TIMER = {
   lazerFireEvent: 8,
   missileFireEvent: 10,
   meteorsFireEvent:10,
+  lavaFireEvent: 20,
   changePlayerControlEvent: { timer: 0,
     isNormal: true
   }
@@ -67,8 +68,7 @@ Play.prototype = {
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
 
-    this.lava = new Lava(this.game, this.game.width, this.ground.body.y - 5);
-    this.game.add.existing(this.lava);
+    this.lava = null;
 
     this.setUpEnemyKeyListeners();
 
@@ -139,10 +139,9 @@ Play.prototype = {
       this.deathHandler();
     }
 
-    // console.log(this.game.rnd.integerInRange(0,200)% 99 == 1);
-    if ( this.lava.body.x < -192 && this.game.rnd.integerInRange(0,300)% 300 == 0) {
-        console.log("in");
+    if ( this.lava && this.lava.body.x < -192 && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lavaFireEvent) {
         this.lava.reset();
+        DEBUFF_TIMER.lavaFireEvent += this.game.rnd.integerInRange(0,10);
     }
 
   },
@@ -169,6 +168,8 @@ Play.prototype = {
       this.firstaidGenerator.timer.start();
 
       this.instructionGroup.destroy();
+      this.lava = new Lava(this.game, this.game.width*2, this.ground.body.y - 5);
+      this.game.add.existing(this.lava);
     }
   },
   checkScore: function(pipeGroup) {
