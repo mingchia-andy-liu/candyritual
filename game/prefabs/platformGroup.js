@@ -21,9 +21,9 @@ PlatformGroup.prototype.update = function() {
 };
 
 
-PlatformGroup.prototype.reset = function(x, y) {
-  this.topPlatform.reset(320,0);
-  this.bottomPlatform.reset(0,100);
+PlatformGroup.prototype.reset = function(x, y, rndx, rndy) {
+  this.topPlatform.reset( -this.topPlatform.x + rndx * 13, -this.topPlatform.y + rndy * 9);
+  this.bottomPlatform.reset( -this.topPlatform.x + rndx * 13, -this.topPlatform.y + rndy * 9);
   this.x = x;
   this.y = y;
   this.setAll('body.velocity.x', -200);

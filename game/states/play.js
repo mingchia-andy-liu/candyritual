@@ -6,7 +6,7 @@ var Ground = require('../prefabs/ground');
 var Pipe = require('../prefabs/pipe');
 var PipeGroup = require('../prefabs/pipeGroup');
 var Scoreboard = require('../prefabs/scoreboard');
-var Missile = require('../prefabs/missile');
+var Missile = require('../prefabs/traps/missile');
 var Lazer = require('../prefabs/traps/lazer');
 var Platform = require('../prefabs/platform');
 var PlatformGroup = require('../prefabs/platformGroup');
@@ -123,7 +123,7 @@ Play.prototype = {
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
-      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.generatePlatforms, this);
+      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
       this.instructionGroup.destroy();
@@ -204,7 +204,8 @@ Play.prototype = {
     if(!platformGroup) {
       platformGroup = new PlatformGroup(this.game, this.platforms);
     }
-    platformGroup.reset(this.game.width, platformY);
+    var rnd = this.game.rnd.integerInRange(0,123);
+    platformGroup.reset(this.game.width, platformY, rnd%59, rnd%67);
   },
   setUpKeyListerners: function() {
     // add keyboard controls
@@ -240,15 +241,6 @@ Play.prototype = {
 
     this.shot = this.input.keyboard.addKey(Phaser.Keyboard.T);
     this.shot.onDown.add(this.generateMissile, this);
-  },
-  randomLunchDebuff: function() {
-    // add the all the random debuff here
-    // create and add a new Trap object
-    if (!this.trap || this.game.rnd.integerInRange(0,1)%1 == 0) {
-        this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
-        this.game.add.existing(this.trap);
-    }
-
   }
 
 };
