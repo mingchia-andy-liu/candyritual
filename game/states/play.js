@@ -75,6 +75,7 @@ Play.prototype = {
     // enable collisions between the bird and the ground
     // this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
     this.game.physics.arcade.collide(this.bird, this.ground);
+    this.game.physics.arcade.collide(this.bird, this.trap, this.deathHandler, null, this);
 
     if(!this.gameover) {
       // enable collisions between the bird and each group in the pipes group
