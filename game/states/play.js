@@ -142,7 +142,7 @@ Play.prototype = {
       this.char1.body.allowGravity = true;
       this.char1.alive = true;
       // add a timer
-      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
+      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
       this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 20, this.generatePlatforms, this);
@@ -219,9 +219,9 @@ Play.prototype = {
     var pipeY = this.game.rnd.integerInRange(0, 50);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-      // pipeGroup = new PipeGroup(this.game, this.pipes);
+      pipeGroup = new PipeGroup(this.game, this.pipes);
     }
-    // pipeGroup.reset(this.game.width, pipeY);
+    pipeGroup.reset(this.game.width, pipeY);
   },
   generateLazer: function() {
     if (!this.lazer || this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lazerFireEvent) {
