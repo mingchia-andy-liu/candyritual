@@ -7,6 +7,8 @@ var Pipe = require('../prefabs/pipe');
 var PipeGroup = require('../prefabs/pipeGroup');
 var Scoreboard = require('../prefabs/scoreboard');
 var Trap = require('../prefabs/trap');
+var Platform = require('../prefabs/platform');
+var PlatformGroup = require('../prefabs/platformGroup')
 
 function Play() {
 }
@@ -25,6 +27,7 @@ Play.prototype = {
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
+    this.platforms = this.game.add.group();
 
     // create and add a new Ground object
     this.ground = new Ground(this.game, 0, 350, 840, 420);
@@ -81,6 +84,10 @@ Play.prototype = {
         this.checkScore(pipeGroup);
         this.game.physics.arcade.collide(this.bird, pipeGroup);
       }, this);
+
+      this.platforms.forEach(function(platformGroup) {
+        this.game.physics.arcade.collide(this.bird, platformGroup);
+      }, this);
     }
 
     if (this.bird.x < 20) {
@@ -108,6 +115,9 @@ Play.prototype = {
       // add a timer
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
       this.pipeGenerator.timer.start();
+
+      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.5, this.generatePlatforms, this);
+      this.platformGenerator.timer.start();
 
       this.instructionGroup.destroy();
     }
@@ -145,12 +155,22 @@ Play.prototype = {
 
   },
   generatePipes: function() {
-    var pipeY = this.game.rnd.integerInRange(-100, 100);
-    var pipeGroup = this.pipes.getFirstExists(false);
-    if(!pipeGroup) {
-      pipeGroup = new PipeGroup(this.game, this.pipes);
+    // var pipeY = this.game.rnd.integerInRange(-100, 100);
+    // var pipeGroup = this.pipes.getFirstExists(false);
+    // if(!pipeGroup) {
+    //   pipeGroup = new PipeGroup(this.game, this.pipes);
+    // }
+    // pipeGroup.reset(this.game.width, pipeY);
+
+
+  },
+  generatePlatforms: function() {
+    var platformY = this.game.rnd.integerInRange(0, 100);
+    var platformGroup = this.platforms.getFirstExists(false);
+    if(!platformGroup) {
+      platformGroup = new PlatformGroup(this.game, this.platforms);
     }
-    pipeGroup.reset(this.game.width, pipeY);
+    platformGroup.reset(this.game.width, platformY);
 
 
   },
