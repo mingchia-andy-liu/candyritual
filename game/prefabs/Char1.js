@@ -77,6 +77,10 @@ Char1.prototype.getHealth = function() {
   return this.health;
 }
 
+Char1.prototype.gainHealth = function() {
+  this.health++;
+}
+
 Char1.prototype.onKilled = function() {
   this.exists = true;
   this.visible = true;

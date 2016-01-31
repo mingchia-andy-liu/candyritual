@@ -3,7 +3,7 @@
  var _type = "";
 
 var Missile = function(game, x, y, frame, type) {
-  _type = type
+  _type = type;
   if (type === "missile") {
     Phaser.Sprite.call(this, game, x, y, 'missile', frame);
     this.scale.x = 2;

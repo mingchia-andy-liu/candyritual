@@ -12,6 +12,7 @@ var Platform = require('../prefabs/platform');
 var PlatformGroup = require('../prefabs/platformGroup');
 var Lava = require('../prefabs/traps/lava');
 var Meteor = require('../prefabs/traps/meteor');
+var FirstAid = require('../prefabs/firstAid');
 
 var DEBUFF_TIMER = {
   lazerFireEvent: 8,
@@ -69,6 +70,8 @@ Play.prototype = {
 
     this.setUpEnemyKeyListeners();
 
+    this.firstAidNum = 1;
+
     // add mouse/touch controls
     this.game.input.onDown.addOnce(this.startGame, this);
 
@@ -119,6 +122,7 @@ Play.prototype = {
     // this.game.physics.arcade.collide(this.char1, this.ground, this.deathHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.ground);
     this.game.physics.arcade.collide(this.meteors, this.ground);
+    this.game.physics.arcade.collide(this.char1, this.firstAidKit, this.healHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
@@ -141,6 +145,12 @@ Play.prototype = {
 
     if (this.char1.x < 25) {
       this.deathHandler();
+    }
+    if (this.firstAidNum%4 === 0) {
+        this.firstAidNum++;
+        console.log(this.firstAidNum);
+        this.firstAidKit = new FirstAid(this.game, this.game.width/4*3, this.ground.body.y - 20, 0);
+        this.game.add.existing(this.firstAidKit);
     }
 
     if ( this.lava && this.lava.body.x < -192 && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lavaFireEvent) {
@@ -199,6 +209,11 @@ Play.prototype = {
       this.scoreText.setText(this.score.toString());
       this.sounds.scoreSound.play();
     }
+  },
+  healHandler: function(char1, AidKit) {
+    this.updateHealth('UP');
+    this.char1.gainHealth();
+    AidKit.kill();
   },
   damageHandler: function(char1, enemy) {
     this.updateHealth('DOWN');
@@ -285,6 +300,7 @@ Play.prototype = {
         this.missile = new Missile(this.game, missleX, missileY, 6, "missile");
         this.game.add.existing(this.missile);
         this.missile.shoot();
+        this.firstAidNum++;
         this.missileButton.filters = [this.gray]
         DEBUFF_TIMER.missileFireEvent = 10 + this.game.time.totalElapsedSeconds();
     }
