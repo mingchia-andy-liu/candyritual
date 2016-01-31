@@ -77,7 +77,8 @@ Char1.prototype.getHealth = function() {
 }
 
 Char1.prototype.gainHealth = function() {
-  this.health++;
+  if (this.health < 3)
+    this.health++;
 }
 
 Char1.prototype.onKilled = function() {
