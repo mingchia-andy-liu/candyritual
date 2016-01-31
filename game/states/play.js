@@ -219,6 +219,7 @@ Play.prototype = {
     if(!this.char1.alive && !this.gameover) {
       this.char1.body.allowGravity = true;
       this.char1.alive = true;
+      this.enemy.alive = true;
       // add a timer
       var pipeRandInt = this.game.rnd.integerInRange(5, 15);
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * pipeRandInt, this.generatePipes, this);
@@ -296,6 +297,7 @@ Play.prototype = {
       this.scoreboard.show(this.score);
       this.gameover = true;
       this.char1.kill();
+      this.enemy.kill();
       this.pipes.callAll('stop');
       this.rewards.callAll('stop');
       this.platforms.callAll('stop');
