@@ -136,7 +136,7 @@ Play.prototype = {
     this.game.physics.arcade.overlap(this.char1, this.firstAidKit, this.healHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
-    this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
+    this.game.physics.arcade.collide(this.char1, this.lava, this.damageHandler, null, this);
 
     if(!this.gameover) {
       // enable collisions between the char1 and each group in the pipes group
@@ -239,7 +239,8 @@ Play.prototype = {
   damageHandler: function(char1, enemy) {
     this.updateHealth('DOWN');
     this.char1.takeDamage();
-    enemy.kill();
+    
+    
 
     //TODO: Damage animation / sprite when taking damage
 

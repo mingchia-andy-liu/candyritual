@@ -42,7 +42,7 @@ Char1.prototype.moveUp = function() {
 
 Char1.prototype.moveLeft = function() {
   if (!!this.alive) {
-    this.body.velocity.x = -200;
+    this.body.velocity.x = -400;
   }
 };
 
