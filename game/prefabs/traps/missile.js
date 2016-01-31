@@ -3,7 +3,7 @@
  var _type = "";
 
 var Missile = function(game, x, y, frame, type) {
-  _type = type
+  _type = type;
   if (type === "missile") {
     Phaser.Sprite.call(this, game, x, y, 'missile', frame);
     this.scale.x = 2;
@@ -12,6 +12,10 @@ var Missile = function(game, x, y, frame, type) {
   }
   else {
     Phaser.Sprite.call(this, game, x, y, 'meteor', frame);
+    this.scale.x = 8;
+    this.scale.y = 8;
+    this.animations.add('meteorFlames', [0, 1, 2], 3, true);
+    this.animations.play('meteorFlames');
   }
   this.anchor.setTo(0.5, 0.5);
 

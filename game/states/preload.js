@@ -26,8 +26,10 @@ Preload.prototype = {
     this.load.spritesheet('platform', 'assets/ground.png',21,21,22);
     this.load.spritesheet('lava', 'assets/ground.png',21,21,22);
     this.load.image('startButton', 'assets/start-button.png');
+    this.load.image('firstAid', 'assets/firstAid.png');
     this.load.spritesheet('heart', 'assets/hearts.png', 21, 21, 1);
     this.load.spritesheet('missile', 'assets/projectiles.png', 21, 21, 21);
+    this.load.spritesheet('buttons', 'assets/buttons.png', 21, 21, 8);
 
     //TODO: UPDATE INSTRUCTIONS
     // this.load.image('instructions', 'assets/instructions.png');
@@ -37,7 +39,9 @@ Preload.prototype = {
     this.load.spritesheet('medals', 'assets/medals.png',44, 46, 2);
     this.load.image('gameover', 'assets/gameover.png');
     this.load.image('particle', 'assets/particle.png');
-    this.load.image('meteor', 'assets/meteor.png');
+    this.load.spritesheet('meteor', 'assets/meteor1.png',21,13,3);
+
+    this.load.script('gray', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Gray.js');
 
     this.load.audio('flap', 'assets/flap.wav');
     this.load.audio('pipeHit', 'assets/pipe-hit.wav');

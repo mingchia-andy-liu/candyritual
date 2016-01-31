@@ -2,7 +2,6 @@
 
 var Char1 = function(game, x, y, frame) {
   Phaser.Sprite.call(this, game, x, y, 'char1', frame);
-
   this.scale.x = 2;
   this.scale.y = 2;
   this.anchor.setTo(0.5, 0.5);
@@ -75,6 +74,11 @@ Char1.prototype.takeDamage = function() {
 
 Char1.prototype.getHealth = function() {
   return this.health;
+}
+
+Char1.prototype.gainHealth = function() {
+  if (this.health < 3)
+    this.health++;
 }
 
 Char1.prototype.onKilled = function() {
