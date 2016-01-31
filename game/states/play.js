@@ -226,6 +226,7 @@ Play.prototype = {
     if(!this.char1.alive && !this.gameover) {
       this.instructionMusic.stop();
       this.actionMusic.play();
+      this.actionMusic.loop = true;
       this.char1.body.allowGravity = true;
       this.char1.alive = true;
       this.enemy.alive = true;
@@ -263,7 +264,7 @@ Play.prototype = {
     this.updateHealth('DOWN');
     this.char1.setInvincible();
     this.char1.takeDamage(enemy);
-    if (enemy instanceof Missile && enemy.key === "missile") {
+    if (enemy instanceof Missile) {
       enemy.kill();
     }
 
