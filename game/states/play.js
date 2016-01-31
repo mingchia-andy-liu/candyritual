@@ -302,8 +302,10 @@ Play.prototype = {
     if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer){
       DEBUFF_TIMER.changePlayerControlEvent.isNormal = !DEBUFF_TIMER.changePlayerControlEvent.isNormal;
       this.swapKeyListeners(DEBUFF_TIMER.changePlayerControlEvent.isNormal);
+      DEBUFF_TIMER.changePlayerControlEvent.isNormal = !DEBUFF_TIMER.changePlayerControlEvent.isNormal;
+      this.game.time.events.add(Phaser.Timer.SECOND*2, function(){this.swapKeyListeners(DEBUFF_TIMER.changePlayerControlEvent.isNormal)}, this);
       this.swapKeyButton.filters = [this.gray];
-      DEBUFF_TIMER.changePlayerControlEvent.timer =  + this.game.time.totalElapsedSeconds();
+      DEBUFF_TIMER.changePlayerControlEvent.timer = 30 + this.game.time.totalElapsedSeconds();
     }
   },
   swapKeyListeners: function(bool) {
