@@ -11,10 +11,10 @@ var Scoreboard = function(game) {
   this.scoreboard = this.create(this.game.width / 2, 200, 'scoreboard');
   this.scoreboard.anchor.setTo(0.5, 0.5);
   
-  this.scoreText = this.game.add.bitmapText(this.scoreboard.width, 180, 'flappyfont', '', 18);
+  this.scoreText = this.game.add.bitmapText(this.game.width / 2, 180, 'flappyfont', '', 18);
   this.add(this.scoreText);
   
-  this.bestText = this.game.add.bitmapText(this.scoreboard.width, 230, 'flappyfont', '', 18);
+  this.bestText = this.game.add.bitmapText(this.game.width / 2, 230, 'flappyfont', '', 18);
   this.add(this.bestText);
 
   // add our start button with a callback
@@ -46,12 +46,12 @@ Scoreboard.prototype.show = function(score) {
 
   this.bestText.setText(bestScore.toString());
 
-  if(score >= 10 && score < 20)
-  {
-    coin = this.game.add.sprite(-65 , 7, 'medals', 1);
-  } else if(score >= 20) {
-    coin = this.game.add.sprite(-65 , 7, 'medals', 0);
-  }
+  // if(score >= 10 && score < 20)
+  // {
+  //   coin = this.game.add.sprite(-65 , 7, 'medals', 1);
+  // } else if(score >= 20) {
+  //   coin = this.game.add.sprite(-65 , 7, 'medals', 0);
+  // }
 
   this.game.add.tween(this).to({y: 0}, 1000, Phaser.Easing.Bounce.Out, true);
 

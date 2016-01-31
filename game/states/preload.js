@@ -26,8 +26,8 @@ Preload.prototype = {
     this.load.spritesheet('platform', 'assets/ground.png',21,21,22);
     this.load.spritesheet('lava', 'assets/ground.png',21,21,22);
     this.load.image('startButton', 'assets/start-button.png');
-    this.load.image('firstAid', 'assets/firstAid.png');
-    this.load.spritesheet('reward', 'assets/interactive1.png',21,21,10);
+    this.load.image('firstAid', 'assets/firstaid.png');
+    this.load.spritesheet('reward', 'assets/pinkcandy.png',21,21,0);
     this.load.spritesheet('heart', 'assets/hearts.png', 21, 21, 1);
     this.load.spritesheet('missile', 'assets/projectiles.png', 21, 21, 21);
     this.load.spritesheet('buttons', 'assets/buttons.png', 21, 21, 8);
@@ -36,7 +36,7 @@ Preload.prototype = {
     this.load.image('instructions', 'assets/instructions2.png');
     this.load.image('getReady', 'assets/get-ready.png');
 
-    this.load.image('scoreboard', 'assets/scoreboard.png');
+    this.load.image('scoreboard', 'assets/scoreboard1.png');
     this.load.spritesheet('medals', 'assets/medals.png',44, 46, 2);
     this.load.image('gameover', 'assets/gameover.png');
     this.load.image('particle', 'assets/particle.png');
