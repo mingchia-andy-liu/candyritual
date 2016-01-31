@@ -16,14 +16,28 @@ var FirstAid = require('../prefabs/firstAid');
 var Reward = require('../prefabs/reward');
 var RewardGroup = require('../prefabs/rewardGroup');
 
-var DEBUFF_TIMER = {
-  lazerFireEvent: 8,
-  missileFireEvent: 10,
-  meteorsFireEvent:0,
-  lavaFireEvent: 20,
-  changePlayerControlEvent: { timer: 0,
-    isNormal: true
-  }
+var DEBUFFS = {
+  lazerFireEvent:
+    { timer: 8,
+      reset: 8
+    },
+  missileFireEvent:
+    { timer: 10,
+      reset: 10
+    },
+  meteorsFireEvent:
+    { timer: 0,
+      reset: 0
+    },
+  lavaFireEvent:
+    { timer: 20,
+      reset: 20,
+    },
+  swapPlayerControlEvent:
+    { timer: 0,
+      isNormal: true,
+      reset: 0
+    }
 };
 
 
@@ -39,19 +53,20 @@ Play.prototype = {
 
     // add the background sprite
     this.background = this.game.add.tileSprite(0,-42,840,420,'background');
+
+    //initialize the health bars
     this.healthBar1 = this.game.add.sprite(0, 0, 'heart');
-
-
     this.healthBar1.scale.x = 2;
     this.healthBar1.scale.y = 2;
+    this.healthBar1.smoothed = false;
     this.healthBar2 = this.game.add.sprite(50, 0, 'heart');
     this.healthBar2.scale.x = 2;
     this.healthBar2.scale.y = 2;
+    this.healthBar2.smoothed = false;
     this.healthBar3 = this.game.add.sprite(100, 0, 'heart');
     this.healthBar3.scale.x = 2;
     this.healthBar3.scale.y = 2;
-
-    this.healthBar1.smoothed = false;
+    this.healthBar3.smoothed = false;
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
@@ -66,18 +81,16 @@ Play.prototype = {
     // create and add a new Char1 object
     this.char1 = new Char1(this.game, 100, this.ground.y-25);
     this.game.add.existing(this.char1);
-
     this.setUpKeyListeners();
 
     //create and add new Enemy object
     this.enemy = new Enemy(this.game, 700, 200);
     this.enemy.smoothed = false;
     this.game.add.existing(this.enemy);
+    this.setUpEnemyKeyListeners();
 
     this.lava = null;
     this.firstAidKit;
-
-    this.setUpEnemyKeyListeners();
 
     this.firstAidNum = 1;
 
@@ -87,13 +100,11 @@ Play.prototype = {
     // keep the spacebar from propogating up to the browser
     this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
 
-
     this.score = 0;
     this.scoreText = this.game.add.bitmapText(this.game.width/2, 10, 'flappyfont',this.score.toString(), 24);
 
     this.instructionGroup = this.game.add.group();
     this.instructionGroup.add(this.game.add.sprite(this.game.width/2, 200,'instructions'));
-
     this.instructionGroup.setAll('anchor.x', 0.5);
     this.instructionGroup.setAll('anchor.y', 0.5);
 
@@ -117,23 +128,22 @@ Play.prototype = {
     this.lazerButton = this.game.add.sprite(this.game.width - 50, 0, 'buttons', 0);
     this.lazerButton.scale.x = 2;
     this.lazerButton.scale.y = 2;
+    this.lazerButton.smoothed = false;
     this.swapKeyButton = this.game.add.sprite(this.game.width - 100, 0, 'buttons', 2);
     this.swapKeyButton.scale.x = 2;
     this.swapKeyButton.scale.y = 2;
+    this.swapKeyButton.smoothed = false;
     this.missileButton = this.game.add.sprite(this.game.width - 150, 0, 'buttons', 4);
     this.missileButton.scale.x = 2;
     this.missileButton.scale.y = 2;
+    this.missileButton.smoothed = false;
     this.meteorButton = this.game.add.sprite(this.game.width - 200, 0, 'buttons', 6);
     this.meteorButton.scale.x = 2;
     this.meteorButton.scale.y = 2;
-
-    this.lazerButton.smoothed = false;
-
-
+    this.meteorButton.smoothed = false;
   },
   update: function() {
     // enable collisions between the char1 and the ground
-    // this.game.physics.arcade.collide(this.char1, this.ground, this.deathHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.ground);
     this.game.physics.arcade.collide(this.meteors, this.ground);
     this.game.physics.arcade.overlap(this.char1, this.firstAidKit, this.healHandler, null, this);
@@ -144,7 +154,6 @@ Play.prototype = {
     if(!this.gameover) {
       // enable collisions between the char1 and each group in the pipes group
       this.pipes.forEach(function(pipeGroup) {
-        // this.checkScore(pipeGroup);
         this.game.physics.arcade.collide(this.char1, pipeGroup);
       }, this);
 
@@ -164,6 +173,7 @@ Play.prototype = {
     if (this.char1.x < 25) {
       this.deathHandler();
     }
+
     if (!this.firstAidKit && this.firstAidNum%4 === 0) {
         this.firstAidNum++;
         var xOffSet = this.game.rnd.integerInRange(0, this.game.width);
@@ -173,39 +183,38 @@ Play.prototype = {
         this.game.add.existing(this.firstAidKit);
     }
 
-    if ( this.lava && this.lava.body.x < -192 && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lavaFireEvent) {
+    if ( this.lava && this.lava.body.x < -192 && this.game.time.totalElapsedSeconds() > DEBUFFS.lavaFireEvent.timer) {
         this.lava.reset();
-        DEBUFF_TIMER.lavaFireEvent += this.game.rnd.integerInRange(0,10);
+        DEBUFFS.lavaFireEvent.timer += this.game.rnd.integerInRange(0,10);
     }
 
     this.canFire();
-
   },
+
   canFire: function() {
-    if (this.lazerButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lazerFireEvent) {
+    if (this.lazerButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFFS.lazerFireEvent.timer) {
       this.lazerButton.filters = null;
     }
-
-    if (this.swapKeyButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer) {
+    if (this.swapKeyButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFFS.swapPlayerControlEvent.timer) {
       this.swapKeyButton.filters = null;
     }
-
-    if (this.missileButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.missileFireEvent) {
+    if (this.missileButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFFS.missileFireEvent.timer) {
       this.missileButton.filters = null;
     }
-
-    if (this.meteorButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.meteorsFireEvent) {
+    if (this.meteorButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFFS.meteorsFireEvent.timer) {
       this.meteorButton.filters = null;
     }
-
   },
+
   shutdown: function() {
     this.game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
     this.char1.destroy();
     this.pipes.destroy();
+    this.rewards.destroy();
     this.platforms.destroy();
     this.scoreboard.destroy();
   },
+
   startGame: function() {
     if(!this.char1.alive && !this.gameover) {
       this.char1.body.allowGravity = true;
@@ -293,6 +302,10 @@ Play.prototype = {
       this.lava.stop();
       this.pipeGenerator.timer.stop();
       this.ground.stopScroll();
+      DEBUFFS.lazerFireEvent.timer = DEBUFFS.lazerFireEvent.reset;
+      DEBUFFS.missileFireEvent.timer = DEBUFFS.missileFireEvent.reset;
+      DEBUFFS.meteorsFireEvent.timer = DEBUFFS.meteorsFireEvent.reset;
+      DEBUFFS.swapPlayerControlEvent.timer = DEBUFFS.swapPlayerControlEvent.reset;
     }
 
   },
@@ -305,20 +318,19 @@ Play.prototype = {
     pipeGroup.reset(this.game.width, pipeY);
   },
   generateLazer: function() {
-    if (!this.lazer || this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lazerFireEvent) {
+    if (!this.lazer || this.game.time.totalElapsedSeconds() > DEBUFFS.lazerFireEvent.timer) {
       console.log(this.game.time.totalElapsedSeconds());
       var lazerY = this.game.rnd.integerInRange(0, 500);
       // create and add a new lazer object
       this.lazer = new Lazer(this.game, this.game.width-25, lazerY, 2);
       this.game.add.existing(this.lazer);
       this.lazerButton.filters = [this.gray];
-      DEBUFF_TIMER.lazerFireEvent = 8 + this.game.time.totalElapsedSeconds();
+      DEBUFFS.lazerFireEvent.timer = 8 + this.game.time.totalElapsedSeconds();
     }
   },
   generateMissile: function() {
-    if (!this.missile || this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.missileFireEvent) {
-        console.log("this total for missile: " + DEBUFF_TIMER.missileFireEvent);
-        // var missileY = this.game.rnd.integerInRange(0, 300);
+    if (!this.missile || this.game.time.totalElapsedSeconds() > DEBUFFS.missileFireEvent.timer) {
+        console.log("this total for missile: " + DEBUFFS.missileFireEvent.timer);
         var missileY = this.enemy.y;
         var missleX = this.enemy.x;
 
@@ -327,7 +339,7 @@ Play.prototype = {
         this.missile.shoot();
         this.firstAidNum++;
         this.missileButton.filters = [this.gray]
-        DEBUFF_TIMER.missileFireEvent = 10 +  this.game.time.totalElapsedSeconds();
+        DEBUFFS.missileFireEvent.timer = 10 +  this.game.time.totalElapsedSeconds();
     }
   },
   generatePlatforms: function() {
@@ -347,7 +359,7 @@ Play.prototype = {
     rewardGroup.reset(this.game.width, rewardY);
   },
   generateMeteors: function() {
-    if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.meteorsFireEvent) {
+    if (this.game.time.totalElapsedSeconds() > DEBUFFS.meteorsFireEvent.timer) {
     var meteorsX = this.game.rnd.integerInRange(this.game.width/3, this.game.width/2);
     var meteorsGroup = this.meteors.getFirstExists(false);
     if (!meteorsGroup) {
@@ -355,17 +367,17 @@ Play.prototype = {
     }
     meteorsGroup.reset(meteorsX, 0);
     this.meteorButton.filters = [this.gray]
-    DEBUFF_TIMER.meteorsFireEvent = 10 + this.game.time.totalElapsedSeconds();
+    DEBUFFS.meteorsFireEvent.timer = 10 + this.game.time.totalElapsedSeconds();
   }
   },
   changePlayerControl: function(){
-    if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer){
-      DEBUFF_TIMER.changePlayerControlEvent.isNormal = !DEBUFF_TIMER.changePlayerControlEvent.isNormal;
-      this.swapKeyListeners(DEBUFF_TIMER.changePlayerControlEvent.isNormal);
-      DEBUFF_TIMER.changePlayerControlEvent.isNormal = !DEBUFF_TIMER.changePlayerControlEvent.isNormal;
-      this.game.time.events.add(Phaser.Timer.SECOND*2, function(){this.swapKeyListeners(DEBUFF_TIMER.changePlayerControlEvent.isNormal)}, this);
+    if (this.game.time.totalElapsedSeconds() > DEBUFFS.swapPlayerControlEvent.timer){
+      DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
+      this.swapKeyListeners(DEBUFFS.swapPlayerControlEvent.isNormal);
+      DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
+      this.game.time.events.add(Phaser.Timer.SECOND*2, function(){this.swapKeyListeners(DEBUFFS.swapPlayerControlEvent.isNormal)}, this);
       this.swapKeyButton.filters = [this.gray];
-      DEBUFF_TIMER.changePlayerControlEvent.timer = 30 + this.game.time.totalElapsedSeconds();
+      DEBUFFS.swapPlayerControlEvent.timer = 30 + this.game.time.totalElapsedSeconds();
     }
   },
   swapKeyListeners: function(bool) {
