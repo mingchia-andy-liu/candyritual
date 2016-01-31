@@ -10,11 +10,16 @@ var Missile = require('../prefabs/traps/missile');
 var Lazer = require('../prefabs/traps/lazer');
 var Platform = require('../prefabs/platform');
 var PlatformGroup = require('../prefabs/platformGroup');
-var Lava = require('../prefabs/traps/lava.js')
+var Firstaid = require('../prefabs/firstaid');
+var FirstaidGroup = require('../prefabs/firstaidGroup');
+var Lava = require('../prefabs/traps/lava');
+var Meteor = require('../prefabs/traps/meteor');
 
 var DEBUFF_TIMER = {
   lazerFireEvent: 8,
   missileFireEvent: 10,
+  meteorsFireEvent:10,
+  lavaFireEvent: 20,
   changePlayerControlEvent: { timer: 0,
     isNormal: true
   }
@@ -32,17 +37,25 @@ Play.prototype = {
     this.game.physics.arcade.gravity.y = 1200;
 
     // add the background sprite
-    this.background = this.game.add.tileSprite(0,-50,840,420,'background');
-    this.healthBar1 = this.game.add.sprite(0, 0, 'healthBar');
-    this.healthBar2 = this.game.add.sprite(50, 0, 'healthBar');
-    this.healthBar3 = this.game.add.sprite(100, 0, 'healthBar');
+    this.background = this.game.add.tileSprite(0,-42,840,420,'background');
+    this.healthBar1 = this.game.add.sprite(0, 0, 'heart');
+    this.healthBar1.scale.x = 2;
+    this.healthBar1.scale.y = 2;
+    this.healthBar2 = this.game.add.sprite(50, 0, 'heart');
+    this.healthBar2.scale.x = 2;
+    this.healthBar2.scale.y = 2;
+    this.healthBar3 = this.game.add.sprite(100, 0, 'heart');
+    this.healthBar3.scale.x = 2;
+    this.healthBar3.scale.y = 2;
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
     this.platforms = this.game.add.group();
+    this.firstaids = this.game.add.group();
+    this.meteors = this.game.add.group();
 
     // create and add a new Ground object
-    this.ground = new Ground(this.game, 0, 350, 840, 420);
+    this.ground = new Ground(this.game, 0, this.game.height-42, 840, 420);
     this.game.add.existing(this.ground);
 
     // create and add a new Char1 object
@@ -55,8 +68,7 @@ Play.prototype = {
     this.enemy = new Enemy(this.game, 700, 200);
     this.game.add.existing(this.enemy);
 
-    this.lava = new Lava(this.game, this.game.width, this.ground.body.y - 5);
-    this.game.add.existing(this.lava);
+    this.lava = null;
 
     this.setUpEnemyKeyListeners();
 
@@ -79,6 +91,8 @@ Play.prototype = {
 
     this.gameover = false;
 
+    Phaser.Canvas.setSmoothingEnabled(this, true);
+
     this.sounds = {
       pipeHitSound: this.game.add.audio('pipeHit'),
       groundHitSound: this.game.add.audio('groundHit'),
@@ -95,9 +109,11 @@ Play.prototype = {
     // enable collisions between the char1 and the ground
     // this.game.physics.arcade.collide(this.char1, this.ground, this.deathHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.ground);
+    this.game.physics.arcade.collide(this.meteors, this.ground);
     this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
+    this.game.physics.arcade.collide(this.char1, this.firstaid, this.regenHealth, null, this);
 
     if(!this.gameover) {
       // enable collisions between the char1 and each group in the pipes group
@@ -109,16 +125,23 @@ Play.prototype = {
       this.platforms.forEach(function(platformGroup) {
         this.game.physics.arcade.collide(this.char1, platformGroup);
       }, this);
+
+      this.meteors.forEach(function(Meteor){
+        this.game.physics.arcade.collide(this.char1, Meteor);
+      }, this);
+
+      this.firstaids.forEach(function(firstaidGroup){
+        this.game.physics.arcade.collide(this.char1, firstaidGroup);
+      }, this);
     }
 
     if (this.char1.x < 25) {
       this.deathHandler();
     }
 
-    // console.log(this.game.rnd.integerInRange(0,200)% 99 == 1);
-    if ( this.lava.body.x < -192 && this.game.rnd.integerInRange(0,300)% 300 == 0) {
-        console.log("in");
+    if ( this.lava && this.lava.body.x < -192 && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lavaFireEvent) {
         this.lava.reset();
+        DEBUFF_TIMER.lavaFireEvent += this.game.rnd.integerInRange(0,10);
     }
 
   },
@@ -127,6 +150,7 @@ Play.prototype = {
     this.char1.destroy();
     this.pipes.destroy();
     this.platforms.destroy();
+    this.firstaids.destroy();
     this.scoreboard.destroy();
   },
   startGame: function() {
@@ -134,13 +158,18 @@ Play.prototype = {
       this.char1.body.allowGravity = true;
       this.char1.alive = true;
       // add a timer
-      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
+      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
       this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 20, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
+      this.firstaidGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generateFirstaids, this);
+      this.firstaidGenerator.timer.start();
+
       this.instructionGroup.destroy();
+      this.lava = new Lava(this.game, this.game.width*2, this.ground.body.y - 5);
+      this.game.add.existing(this.lava);
     }
   },
   checkScore: function(pipeGroup) {
@@ -183,6 +212,10 @@ Play.prototype = {
         this.healthBar3.visible = false;
     }
   },
+  regenHealth: function(char1, enemy) {
+    this.updateHealth('UP');
+    enemy.kill();
+  },
   lazerHandler: function(char1, enemy) {
     if (enemy.isHarmful) {
       console.log(enemy.isHarmful);
@@ -201,6 +234,7 @@ Play.prototype = {
       this.char1.kill();
       this.pipes.callAll('stop');
       this.platforms.callAll('stop');
+      this.firstaids.callAll('stop');
       this.lava.stop();
       this.pipeGenerator.timer.stop();
       this.ground.stopScroll();
@@ -211,9 +245,9 @@ Play.prototype = {
     var pipeY = this.game.rnd.integerInRange(0, 50);
     var pipeGroup = this.pipes.getFirstExists(false);
     if(!pipeGroup) {
-      // pipeGroup = new PipeGroup(this.game, this.pipes);
+      pipeGroup = new PipeGroup(this.game, this.pipes);
     }
-    // pipeGroup.reset(this.game.width, pipeY);
+    pipeGroup.reset(this.game.width, pipeY);
   },
   generateLazer: function() {
     if (!this.lazer || this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lazerFireEvent) {
@@ -230,7 +264,7 @@ Play.prototype = {
         console.log("this total for missile: " + DEBUFF_TIMER.missileFireEvent);
         var missileY = this.game.rnd.integerInRange(0, 300);
 
-        this.missile = new Missile(this.game, this.game.width+30, missileY);
+        this.missile = new Missile(this.game, this.game.width+30, missileY, 0, "missile");
         this.game.add.existing(this.missile);
         this.missile.shoot();
         DEBUFF_TIMER.missileFireEvent = 10 + this.game.time.totalElapsedSeconds();
@@ -243,6 +277,22 @@ Play.prototype = {
       platformGroup = new PlatformGroup(this.game, this.platforms);
     }
     platformGroup.reset(this.game.width, platformY);
+  },
+  generateMeteors: function() {
+    var meteorsX = this.game.rnd.integerInRange(0, this.game.width);
+    var meteorsGroup = this.meteors.getFirstExists(false);
+    if (!meteorsGroup) {
+        meteorsGroup = new Meteor(this.game, this.meteors);
+    }
+    meteorsGroup.reset(meteorsX, meteorsX/13);
+  },
+  generateFirstaids: function() {
+    var firstaidY = this.game.rnd.integerInRange(200, 300);
+    var firstaidGroup = this.firstaids.getFirstExists(false);
+    if(!firstaidGroup) {
+      firstaidGroup = new FirstaidGroup(this.game, this.firstaids);
+    }
+    firstaidGroup.reset(this.game.width, firstaidY);
   },
   changePlayerControl: function(){
     if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer){
@@ -304,17 +354,11 @@ Play.prototype = {
     this.shot = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     this.shot.onDown.add(this.generateMissile, this);
 
+    this.meteorsKey = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
+    this.meteorsKey.onDown.add(this.generateMeteors, this);
+
     this.changePlayerControlKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
     this.changePlayerControlKey.onDown.add(this.changePlayerControl, this);
-  },
-  randomLunchDebuff: function() {
-    // add the all the random debuff here
-    // create and add a new Trap object
-    if (!this.trap || this.game.rnd.integerInRange(0,1)%1 == 0) {
-        this.trap = new Trap(this.game, this.game.width+20, this.game.rnd.integerInRange(0,this.ground.y));
-        this.game.add.existing(this.trap);
-    }
-
   }
 
 };

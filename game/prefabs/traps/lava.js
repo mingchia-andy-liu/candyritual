@@ -1,7 +1,7 @@
 'use strict';
 
 var Lava = function(game, x, y, frame) {
-  Phaser.Sprite.call(this, game, x, y, 'Lava', frame);
+  Phaser.Sprite.call(this, game, x, y, 'title', frame);
   this.anchor.setTo(0.5, 0);	//tip of the sprite
   this.game.physics.arcade.enableBody(this);
   
@@ -21,11 +21,11 @@ Lava.prototype.update = function() {
 
 Lava.prototype.stop = function() {
 	this.body.velocity.x = 0;
-	this.body.velocity.y = 0;	
+	this.body.velocity.y = 0;
 }
 
 Lava.prototype.reset = function() {
-	this.body.x = this.game.width;
+	this.body.x = this.game.width + this.body.width;
 }
 
 module.exports = Lava;

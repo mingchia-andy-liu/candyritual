@@ -8,11 +8,14 @@ Menu.prototype = {
   },
   create: function() {
     // add the background sprite
-    this.background = this.game.add.tileSprite(0,-50,840,420,'background');
+    this.background = this.game.add.tileSprite(0,-42,840,420,'background');
 
     // add the ground sprite as a tile
     // and start scrolling in the negative x direction
-    this.ground = this.game.add.tileSprite(0,350,840,420,'ground');
+    this.ground = this.game.add.tileSprite(0,this.game.height-42,840,420,'ground');
+    this.ground.frame =2;
+    this.ground.scale.x = 2;
+    this.ground.scale.y = 2;
     this.ground.autoScroll(-100,0);
 
     /** STEP 1 **/
@@ -39,8 +42,8 @@ Menu.prototype = {
     /** STEP 4 **/
     // add an animation to the char1
     // and begin the animation
-    this.char1.animations.add('flap');
-    this.char1.animations.play('flap', 12, true);
+    this.char1.animations.add('walk');
+    this.char1.animations.play('walk', 12, true);
 
     /** STEP 5 **/
     // Set the originating location of the group

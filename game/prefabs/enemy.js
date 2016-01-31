@@ -3,8 +3,12 @@
 var Enemy = function(game, x, y, frame) {
   Phaser.Sprite.call(this, game, x, y, 'enemy', frame);
   this.anchor.setTo(0.5, 0.5);
-  this.animations.add('flap');
-  this.animations.play('flap', 12, true);
+  this.scale.x = 2;
+  this.scale.y = 2;
+  this.animations.add('float', [0,1], 10, true);
+  this.animations.play('float');
+
+  this.animations.add('angry', [4,5,6], 10, true);
 
   this.name = 'enemy';
 
