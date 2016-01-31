@@ -8,7 +8,7 @@ var Enemy = function(game, x, y, frame) {
   this.animations.add('float', [0,1], 10, true);
   this.animations.play('float');
 
-  this.animations.add('angry', [4,5,6], 10, true);
+  // this.animations.add('angry', [4,5,6], 10, true);
 
   this.name = 'enemy';
 

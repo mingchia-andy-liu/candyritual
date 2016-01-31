@@ -16,7 +16,7 @@ var Meteor = require('../prefabs/traps/meteor');
 var DEBUFF_TIMER = {
   lazerFireEvent: 8,
   missileFireEvent: 10,
-  meteorsFireEvent:10,
+  meteorsFireEvent:0,
   lavaFireEvent: 20,
   changePlayerControlEvent: { timer: 0,
     isNormal: true
@@ -108,6 +108,9 @@ Play.prototype = {
     this.missileButton = this.game.add.sprite(this.game.width - 150, 0, 'buttons', 4);
     this.missileButton.scale.x = 2;
     this.missileButton.scale.y = 2;
+    this.meteorButton = this.game.add.sprite(this.game.width - 200, 0, 'buttons', 6);
+    this.meteorButton.scale.x = 2;
+    this.meteorButton.scale.y = 2;
 
 
   },
@@ -159,6 +162,10 @@ Play.prototype = {
 
     if (this.missileButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.missileFireEvent) {
       this.missileButton.filters = null;
+    }
+
+    if (this.meteorButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.meteorsFireEvent) {
+      this.meteorButton.filters = null;
     }
 
   },
@@ -291,12 +298,16 @@ Play.prototype = {
     platformGroup.reset(this.game.width, platformY);
   },
   generateMeteors: function() {
+    if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.meteorsFireEvent) {
     var meteorsX = this.game.rnd.integerInRange(0, this.game.width);
     var meteorsGroup = this.meteors.getFirstExists(false);
     if (!meteorsGroup) {
         meteorsGroup = new Meteor(this.game, this.meteors);
     }
     meteorsGroup.reset(meteorsX, meteorsX/13);
+    this.meteorButton.filters = [this.gray]
+    DEBUFF_TIMER.meteorsFireEvent = 10 + this.game.time.totalElapsedSeconds();
+  }
   },
   changePlayerControl: function(){
     if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer){
