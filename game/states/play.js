@@ -38,6 +38,8 @@ Play.prototype = {
     // add the background sprite
     this.background = this.game.add.tileSprite(0,-42,840,420,'background');
     this.healthBar1 = this.game.add.sprite(0, 0, 'heart');
+
+
     this.healthBar1.scale.x = 2;
     this.healthBar1.scale.y = 2;
     this.healthBar2 = this.game.add.sprite(50, 0, 'heart');
@@ -46,6 +48,8 @@ Play.prototype = {
     this.healthBar3 = this.game.add.sprite(100, 0, 'heart');
     this.healthBar3.scale.x = 2;
     this.healthBar3.scale.y = 2;
+
+    this.healthBar1.smoothed = false;
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
@@ -114,6 +118,8 @@ Play.prototype = {
     this.meteorButton = this.game.add.sprite(this.game.width - 200, 0, 'buttons', 6);
     this.meteorButton.scale.x = 2;
     this.meteorButton.scale.y = 2;
+
+    this.lazerButton.smoothed = false;
 
 
   },

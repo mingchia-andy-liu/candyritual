@@ -2,7 +2,6 @@
 
 var Char1 = function(game, x, y, frame) {
   Phaser.Sprite.call(this, game, x, y, 'char1', frame);
-
   this.scale.x = 2;
   this.scale.y = 2;
   this.anchor.setTo(0.5, 0.5);
