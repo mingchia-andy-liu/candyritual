@@ -8,7 +8,7 @@ var Lava = function(game, x, y, frame) {
 
   this.game.physics.arcade.enableBody(this);
 
-  this.lavaFlowAudio = this.game.add.audio('lava_flow');
+  // this.lavaFlowAudio = this.game.add.audio('lava_flow');
 
   this.body.velocity.x = -200;
   this.body.allowGravity = false;
@@ -26,11 +26,11 @@ Lava.prototype.update = function() {
 Lava.prototype.stop = function() {
 	this.body.velocity.x = 0;
 	this.body.velocity.y = 0;
-  this.lavaFlowAudio.stop();
+  // this.lavaFlowAudio.stop();
 }
 
 Lava.prototype.reset = function() {
-  this.lavaFlowAudio.play();
+  // this.lavaFlowAudio.play();
 	this.body.x = this.game.width + this.body.width;
 }
 

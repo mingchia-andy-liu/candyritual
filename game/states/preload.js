@@ -15,10 +15,8 @@ Preload.prototype = {
     this.load.image('background', 'assets/background.png');
     this.load.spritesheet('ground', 'assets/ground.png', 21,21,22);
 
-    //TODO: UPDATE TITLE
     this.load.image('title', 'assets/splash.png');
 
-    //TODO: UPDATE SPRITES
     this.load.spritesheet('lazer', 'assets/projectiles.png', 21,21,21);
     this.load.spritesheet('char1', 'assets/char1.png', 21,21,11);
     this.load.spritesheet('enemy', 'assets/enemy.png', 21,21,11);
@@ -57,6 +55,7 @@ Preload.prototype = {
     this.load.audio('menu_whoosh', 'assets/menu_whoosh_up.wav');
     this.load.audio('meteor_sound', 'assets/Missile_Explosion.wav');
     this.load.audio('game_over_sound', 'assets/smb_mariodie.wav');
+    this.load.audio('swap_control_sound', 'assets/swapPlayer.wav');
 
     this.load.bitmapFont('flappyfont', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt');
 

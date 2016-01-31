@@ -57,6 +57,8 @@ Play.prototype = {
     this.instructionMusic = this.game.add.audio('menu_music');
     this.instructionMusic.play();
     this.gameOverSound = this.game.add.audio('game_over_sound');
+    this.swapControlSound = this.game.add.audio('swap_control_sound');
+    this.scoreSound = this.game.add.audio('score');
 
     // add the background sprite
     this.background = this.game.add.tileSprite(0,-42,840,420,'background');
@@ -118,12 +120,6 @@ Play.prototype = {
     this.gray = this.game.add.filter('Gray');
 
     Phaser.Canvas.setSmoothingEnabled(this, true);
-
-    this.sounds = {
-      pipeHitSound: this.game.add.audio('pipeHit'),
-      groundHitSound: this.game.add.audio('groundHit'),
-      scoreSound: this.game.add.audio('score')
-    }
 
     //initialize the buttons
     this.lazerButton = this.game.add.sprite(this.game.width - 50, 0, 'buttons', 0);
@@ -237,7 +233,8 @@ Play.prototype = {
   checkScore: function(char1, reward) {
       this.score++;
       this.scoreText.setText(this.score.toString());
-      this.sounds.scoreSound.play();
+      this.scoreSound.play();
+      this.scoreSound.volume = 0.4;
       reward.kill();
   },
   healHandler: function(char1, AidKit) {
@@ -378,6 +375,8 @@ Play.prototype = {
   },
   changePlayerControl: function(){
     if (!this.gameover && (this.game.time.totalElapsedSeconds() > DEBUFFS.swapPlayerControlEvent.timer) && this.enemy.alive) {
+      this.swapControlSound.play();
+      this.swapControlSound.volume = 2;
       DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
       this.swapKeyListeners(DEBUFFS.swapPlayerControlEvent.isNormal);
       DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
