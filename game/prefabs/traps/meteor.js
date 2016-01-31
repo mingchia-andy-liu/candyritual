@@ -9,8 +9,10 @@ var MeteorGroup = function(game, parent) {
   var gameWidth = this.game.width;
   this.rightMeteor = new Missile(this.game, gameWidth/4, 0, 0, "meteor");
   this.add(this.rightMeteor);
-  this.setAll('sprite.scale.y',5);
-  this.setAll('sprite.scale.x', 5);
+  this.rightMeteor.smoothed = false;
+  this.setAll('sprite.smoothed', false);
+  this.setAll('sprite.scale.y',4);
+  this.setAll('sprite.scale.x', 4);
   this.setAll('body.velocity.x', -150);
   this.setAll('body.velocity.y', 150);
 };
