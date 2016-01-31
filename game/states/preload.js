@@ -29,6 +29,7 @@ Preload.prototype = {
     this.load.spritesheet('heart', 'assets/hearts.png', 21, 21, 1);
     this.load.spritesheet('missile', 'assets/projectiles.png', 21, 21, 21);
     this.load.spritesheet('buttons', 'assets/buttons.png', 21, 21, 8);
+    this.load.spritesheet('arrows', 'assets/dance1.png', 21, 21, 16);
 
     this.load.image('instructions', 'assets/instructions2.png');
     this.load.image('getReady', 'assets/get-ready.png');
