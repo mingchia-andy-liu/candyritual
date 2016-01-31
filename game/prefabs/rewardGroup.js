@@ -6,8 +6,8 @@ var RewardGroup = function(game, parent) {
 
   Phaser.Group.call(this, game, parent);
 
-  this.topReward = new Reward(this.game, 320, 0, 5);
-  this.bottomReward = new Reward(this.game,  0, 100, 5);
+  this.topReward = new Reward(this.game, 320, 0, 6);
+  this.bottomReward = new Reward(this.game,  0, 100, 6);
   this.add(this.topReward);
   this.add(this.bottomReward)
   this.setAll('body.velocity.x', -150);

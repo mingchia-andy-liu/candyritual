@@ -139,7 +139,7 @@ Play.prototype = {
     this.game.physics.arcade.collide(this.char1, this.firstAidKit, this.healHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
-    // this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
+    this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
 
     if(!this.gameover) {
       // enable collisions between the char1 and each group in the pipes group
@@ -157,7 +157,7 @@ Play.prototype = {
       }, this)
 
       this.rewards.forEach(function(reward){
-        this.game.physics.arcade.collide(this.char1, reward, this.checkScore, null, this);
+        this.game.physics.arcade.overlap(this.char1, reward, this.checkScore, null, this);
       }, this)
     }
 
