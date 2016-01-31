@@ -210,10 +210,10 @@ Play.prototype = {
   },
   checkScore: function(pipeGroup) {
     if(pipeGroup.exists && !pipeGroup.hasScored && pipeGroup.topPipe.world.x <= this.char1.world.x) {
-      pipeGroup.hasScored = true;
-      this.score++;
-      this.scoreText.setText(this.score.toString());
-      this.sounds.scoreSound.play();
+      // pipeGroup.hasScored = true;
+      // this.score++;
+      // this.scoreText.setText(this.score.toString());
+      // this.sounds.scoreSound.play();
     }
   },
   healHandler: function(char1, AidKit) {
@@ -360,6 +360,10 @@ Play.prototype = {
   }
 },
   setUpKeyListeners: function() {
+
+    this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.spaceKey.onDown.addOnce(this.startGame, this);
+
     // add keyboard controls
     this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.upKey.onDown.addOnce(this.startGame, this);
