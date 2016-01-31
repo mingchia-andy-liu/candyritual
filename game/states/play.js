@@ -156,7 +156,7 @@ Play.prototype = {
       }, this);
 
       this.meteors.forEach(function(Meteor){
-        this.game.physics.arcade.collide(this.char1, Meteor, this.damageHandler, null, this);
+        this.game.physics.arcade.overlap(this.char1, Meteor, this.damageHandler, null, this);
       }, this)
 
       this.rewards.forEach(function(reward){

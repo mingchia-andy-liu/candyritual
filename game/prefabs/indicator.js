@@ -31,13 +31,13 @@ Indicator.prototype.blinking = function() {
 
 Indicator.prototype.appear = function() {
   this.game.add.tween(this).to({alpha: 1}, 0.1, "Linear", true);
-  blinkingTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.2, this.blinking, this);
-  blinkingTimer.timer.start();
+  this.blinkingTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.2, this.blinking, this);
+  this.blinkingTimer.timer.start();
 };
 
 Indicator.prototype.disappear = function() {
   this.game.add.tween(this).to({alpha: 0}, 0.1, "Linear", true);
-  blinkingTimer.timer.stop();
+  // this.blinkingTimer.timer.stop();
 };
 
 Indicator.prototype.tweenTint = function(obj, startColor, endColor, time) {
