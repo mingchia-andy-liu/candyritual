@@ -68,6 +68,7 @@ Play.prototype = {
 
     //create and add new Enemy object
     this.enemy = new Enemy(this.game, 700, 200);
+    this.enemy.smoothed = false;
     this.game.add.existing(this.enemy);
 
     this.lava = null;
