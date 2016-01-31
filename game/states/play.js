@@ -393,16 +393,16 @@ Play.prototype = {
     this.enemyDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     this.enemyDownKey.onDown.add(this.enemy.moveDown, this.enemy);
 
-    this.enemyGKey = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
+    this.enemyGKey = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
     this.enemyGKey.onDown.add(this.generateLazer, this);
 
-    this.shot = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
+    this.shot = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
     this.shot.onDown.add(this.generateMissile, this);
 
-    this.meteorsKey = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
+    this.meteorsKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
     this.meteorsKey.onDown.add(this.generateMeteors, this);
 
-    this.changePlayerControlKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
+    this.changePlayerControlKey = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     this.changePlayerControlKey.onDown.add(this.changePlayerControl, this);
   }
 
