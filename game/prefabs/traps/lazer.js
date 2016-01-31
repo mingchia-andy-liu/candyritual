@@ -4,12 +4,13 @@ var Lazer = function(game, x, y, frame) {
   Phaser.Sprite.call(this, game, x, y, 'lazer', frame);
   this.anchor.setTo(0.5, 0.5);
   this.scale.y = 50;
+  this.scale.x = 2;
 
   // enable physics on the lazer
   this.game.physics.arcade.enableBody(this);
   this.body.allowGravity = false;
   this.body.immovable = true;
-  this.body.velocity.x = -50;
+  this.body.velocity.x = -75;
   this.isHarmful = true;
 
   this.time = this.game.time.create(false);
