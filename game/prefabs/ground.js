@@ -6,7 +6,7 @@ var Ground = function(game, x, y, width, height) {
   this.scale.x = 2;
   this.scale.y = 3;
   // start scrolling our ground
-  this.autoScroll(-50,0);
+  this.autoScroll(-100,0);
 
   // enable physics on the ground sprite
   // this is needed for collision detection

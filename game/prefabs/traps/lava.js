@@ -9,7 +9,7 @@ var Lava = function(game, x, y, frame) {
   // this.anchor.setTo(0.5, 0);	//tip of the sprite
   this.game.physics.arcade.enableBody(this);
   
-  this.body.velocity.x = -100
+  this.body.velocity.x = -200;
   this.body.allowGravity = false;
   this.body.immovable = true;
   

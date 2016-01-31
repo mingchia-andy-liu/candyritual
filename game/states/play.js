@@ -201,10 +201,12 @@ Play.prototype = {
       this.char1.body.allowGravity = true;
       this.char1.alive = true;
       // add a timer
-      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 10, this.generatePipes, this);
+      var pipeRandInt = this.game.rnd.integerInRange(5, 15);
+      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * pipeRandInt, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
-      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 12, this.generatePlatforms, this);
+      var platformRandInt = this.game.rnd.integerInRange(10, 15);
+      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * platformRandInt, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
       this.instructionGroup.destroy();
@@ -313,7 +315,7 @@ Play.prototype = {
         this.missile.shoot();
         this.firstAidNum++;
         this.missileButton.filters = [this.gray]
-        DEBUFF_TIMER.missileFireEvent = 1 +  this.game.time.totalElapsedSeconds();
+        DEBUFF_TIMER.missileFireEvent = 10 +  this.game.time.totalElapsedSeconds();
     }
   },
   generatePlatforms: function() {
