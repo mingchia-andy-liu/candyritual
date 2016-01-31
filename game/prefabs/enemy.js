@@ -34,25 +34,25 @@ Enemy.prototype.update = function() {
 
 Enemy.prototype.moveUp = function() {
   if (!!this.alive) {
-    this.body.velocity.y = -100;
+    this.y -= 1;
   }
 };
 
 Enemy.prototype.moveLeft = function() {
   if (!!this.alive) {
-    this.body.velocity.x = -100;
+    this.x -= 1;
   }
 };
 
 Enemy.prototype.moveRight = function() {
   if (!!this.alive) {
-    this.body.velocity.x = 100;
+    this.x += 1;
   }
 };
 
 Enemy.prototype.moveDown = function() {
   if (!!this.alive) {
-    this.body.velocity.y = 100;
+    this.y += 1;
   }
 };
 

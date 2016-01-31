@@ -180,6 +180,22 @@ Play.prototype = {
     }
 
     this.canFire();
+
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.W)) {
+      this.enemy.moveUp();
+    }
+
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.A)) {
+      this.enemy.moveLeft();
+    }
+
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.S)) {
+      this.enemy.moveDown();
+    }
+
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.D)) {
+      this.enemy.moveRight();
+    }
   },
 
   canFire: function() {
@@ -424,17 +440,6 @@ Play.prototype = {
   },
   setUpEnemyKeyListeners: function() {
     // add enemy keyboard controls
-    this.enemyUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
-    this.enemyUpKey.onDown.add(this.enemy.moveUp, this.enemy);
-
-    this.enemyLeftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-    this.enemyLeftKey.onDown.add(this.enemy.moveLeft, this.enemy);
-
-    this.enemyRightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
-    this.enemyRightKey.onDown.add(this.enemy.moveRight, this.enemy);
-
-    this.enemyDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-    this.enemyDownKey.onDown.add(this.enemy.moveDown, this.enemy);
 
     this.enemyGKey = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
     this.enemyGKey.onDown.add(this.generateLazer, this);
