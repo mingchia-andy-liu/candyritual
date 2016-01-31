@@ -1,8 +1,12 @@
 'use strict';
 
 var Lava = function(game, x, y, frame) {
-  Phaser.Sprite.call(this, game, x, y, 'title', frame);
-  this.anchor.setTo(0.5, 0);	//tip of the sprite
+  Phaser.Sprite.call(this, game, x, y, 'lava', frame);
+  this.scale.x = 6;
+  this.scale.y = 4;
+  this.frame = 21;
+
+  // this.anchor.setTo(0.5, 0);	//tip of the sprite
   this.game.physics.arcade.enableBody(this);
   
   this.body.velocity.x = -100

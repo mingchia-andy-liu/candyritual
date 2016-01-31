@@ -245,9 +245,11 @@ Play.prototype = {
   generateMissile: function() {
     if (!this.missile || this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.missileFireEvent) {
         console.log("this total for missile: " + DEBUFF_TIMER.missileFireEvent);
-        var missileY = this.game.rnd.integerInRange(0, 300);
+        // var missileY = this.game.rnd.integerInRange(0, 300);
+        var missileY = this.enemy.y;
+        var missleX = this.enemy.x;
 
-        this.missile = new Missile(this.game, this.game.width+30, missileY, 0, "missile");
+        this.missile = new Missile(this.game, missleX, missileY, 0, "missile");
         this.game.add.existing(this.missile);
         this.missile.shoot();
         DEBUFF_TIMER.missileFireEvent = 10 + this.game.time.totalElapsedSeconds();
