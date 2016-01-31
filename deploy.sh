@@ -1,5 +1,4 @@
-#
-/bin/bash
+#/bin/bash
 
 if [[ $# -eq 0 ]] ; then
   echo 'make sure /deployCandyDance repo is in the same parent directory as this'
