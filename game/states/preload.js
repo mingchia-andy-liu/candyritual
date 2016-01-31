@@ -39,7 +39,7 @@ Preload.prototype = {
     this.load.spritesheet('medals', 'assets/medals.png',44, 46, 2);
     this.load.image('gameover', 'assets/gameover.png');
     this.load.image('particle', 'assets/particle.png');
-    this.load.spritesheet('meteor', 'assets/meteor1.png',21,21,3);
+    this.load.spritesheet('meteor', 'assets/meteor1.png',21,13,3);
 
     this.load.script('gray', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Gray.js');
 
