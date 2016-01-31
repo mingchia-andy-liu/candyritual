@@ -4,10 +4,15 @@
 
 var Missile = function(game, x, y, frame, type) {
   _type = type
-  if (type === "missile")
-    Phaser.Sprite.call(this, game, x, y, 'char1', frame);
-  else
+  if (type === "missile") {
+    Phaser.Sprite.call(this, game, x, y, 'missile', frame);
+    this.scale.x = 2;
+    this.scale.y = 2;
+    this.angle += 180;
+  }
+  else {
     Phaser.Sprite.call(this, game, x, y, 'meteor', frame);
+  }
   this.anchor.setTo(0.5, 0.5);
 
 
@@ -26,7 +31,7 @@ Missile.prototype = Object.create(Phaser.Sprite.prototype);
 Missile.prototype.constructor = Missile;
 
 Missile.prototype.update = function() {
-  this.angle += 120;
+
 
 };
 
