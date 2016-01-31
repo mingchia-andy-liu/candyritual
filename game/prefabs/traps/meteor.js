@@ -7,7 +7,7 @@ var MeteorGroup = function(game, parent) {
   Phaser.Group.call(this, game, parent);
 
   var gameWidth = this.game.width;
-  this.rightMeteor = new Missile(this.game, gameWidth/4, 0, 0, "meteor");
+  this.rightMeteor = new Missile(this.game, 0, 0, 0, "meteor");
   this.add(this.rightMeteor);
   this.rightMeteor.smoothed = false;
   this.setAll('sprite.smoothed', false);
@@ -27,7 +27,7 @@ MeteorGroup.prototype.update = function() {
 
 MeteorGroup.prototype.reset = function(x, y) {
   this.rightMeteor.reset(x, 0);
-  this.x = x/2;
+  this.x = x;
   this.y = 0;
   
   var gameWidth = this.game.width;

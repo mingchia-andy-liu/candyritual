@@ -322,7 +322,7 @@ Play.prototype = {
   },
   generateMeteors: function() {
     if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.meteorsFireEvent) {
-    var meteorsX = this.game.rnd.integerInRange(this.game.width/3, this.game.width);
+    var meteorsX = this.game.rnd.integerInRange(this.game.width/3, this.game.width/2);
     var meteorsGroup = this.meteors.getFirstExists(false);
     if (!meteorsGroup) {
         meteorsGroup = new Meteor(this.game, this.meteors);
