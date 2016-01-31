@@ -290,6 +290,9 @@ Play.prototype = {
       this.rewards.callAll('stop');
       this.platforms.callAll('stop');
       this.lava.stop();
+      if (this.lazer) {
+        this.lazer.kill();
+      }
       this.pipeGenerator.timer.stop();
       this.ground.stopScroll();
       DEBUFFS.lazerFireEvent.timer = DEBUFFS.lazerFireEvent.reset;
@@ -308,7 +311,7 @@ Play.prototype = {
     pipeGroup.reset(this.game.width, pipeY);
   },
   generateLazer: function() {
-    if (!this.lazer || this.game.time.totalElapsedSeconds() > DEBUFFS.lazerFireEvent.timer) {
+    if (!this.gameover && (!this.lazer || this.game.time.totalElapsedSeconds() > DEBUFFS.lazerFireEvent.timer) && this.enemy.alive) {
       console.log(this.game.time.totalElapsedSeconds());
       var lazerY = this.game.rnd.integerInRange(0, 500);
       // create and add a new lazer object
@@ -319,14 +322,16 @@ Play.prototype = {
     }
   },
   generateMissile: function() {
-    if (!this.missile || this.game.time.totalElapsedSeconds() > DEBUFFS.missileFireEvent.timer) {
+    if (!this.gameover && (!this.missile || this.game.time.totalElapsedSeconds() > DEBUFFS.missileFireEvent.timer) && this.enemy.alive) {
         console.log("this total for missile: " + DEBUFFS.missileFireEvent.timer);
         var missileY = this.enemy.y;
         var missleX = this.enemy.x;
 
         this.missile = new Missile(this.game, missleX, missileY, 6, "missile");
         this.game.add.existing(this.missile);
+        
         this.missile.shoot();
+        
         this.firstAidNum++;
         this.missileButton.filters = [this.gray]
         DEBUFFS.missileFireEvent.timer = 10 +  this.game.time.totalElapsedSeconds();
@@ -349,7 +354,7 @@ Play.prototype = {
     rewardGroup.reset(this.game.width, rewardY);
   },
   generateMeteors: function() {
-    if (this.game.time.totalElapsedSeconds() > DEBUFFS.meteorsFireEvent.timer) {
+    if (!this.gameover && (this.game.time.totalElapsedSeconds() > DEBUFFS.meteorsFireEvent.timer) && this.enemy.alive) {
     var meteorsX = this.game.rnd.integerInRange(this.game.width/3, this.game.width/2);
     var meteorsGroup = this.meteors.getFirstExists(false);
     if (!meteorsGroup) {
@@ -361,7 +366,7 @@ Play.prototype = {
   }
   },
   changePlayerControl: function(){
-    if (this.game.time.totalElapsedSeconds() > DEBUFFS.swapPlayerControlEvent.timer){
+    if (!this.gameover && (this.game.time.totalElapsedSeconds() > DEBUFFS.swapPlayerControlEvent.timer) && this.enemy.alive) {
       DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
       this.swapKeyListeners(DEBUFFS.swapPlayerControlEvent.isNormal);
       DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
@@ -438,7 +443,6 @@ Play.prototype = {
     oSprite.scale.y = iSize;
     oSprite.smoothed = false;
   }
-
 };
 
 module.exports = Play;
