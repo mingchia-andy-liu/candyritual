@@ -72,6 +72,7 @@ Play.prototype = {
     this.game.add.existing(this.enemy);
 
     this.lava = null;
+    this.firstAidKit;
 
     this.setUpEnemyKeyListeners();
 
@@ -153,7 +154,7 @@ Play.prototype = {
     if (this.char1.x < 25) {
       this.deathHandler();
     }
-    if (this.firstAidNum%4 === 0) {
+    if (!this.firstAidKit && this.firstAidNum%4 === 0) {
         this.firstAidNum++;
         var xOffSet = this.game.rnd.integerInRange(0, this.game.width);
         var yOffSet = this.game.rnd.integerInRange(this.game.height/2.5, this.game.height/3*2);
@@ -222,6 +223,7 @@ Play.prototype = {
   healHandler: function(char1, AidKit) {
     this.updateHealth('UP');
     this.char1.gainHealth();
+    this.firstAidKit = null;
     AidKit.kill();
   },
   damageHandler: function(char1, enemy) {
@@ -311,7 +313,7 @@ Play.prototype = {
         this.missile.shoot();
         this.firstAidNum++;
         this.missileButton.filters = [this.gray]
-        DEBUFF_TIMER.missileFireEvent = 10 + this.game.time.totalElapsedSeconds();
+        DEBUFF_TIMER.missileFireEvent = 1 +  this.game.time.totalElapsedSeconds();
     }
   },
   generatePlatforms: function() {
