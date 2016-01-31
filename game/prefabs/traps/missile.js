@@ -10,7 +10,7 @@ var Missile = function(game, x, y, frame, type) {
     this.scale.y = 2;
     this.angle += 180;
   }
-  else {
+  else {  // this should be/can only be meteor
     Phaser.Sprite.call(this, game, x, y, 'meteor', frame);
     this.scale.x = 8;
     this.scale.y = 8;
@@ -19,24 +19,15 @@ var Missile = function(game, x, y, frame, type) {
   }
   this.anchor.setTo(0.5, 0.5);
 
-
-  // this.alive = false;
-  // this.onGround = false;
-
   this.game.physics.arcade.enableBody(this);
   this.body.allowGravity = false;
   this.body.collideWorldBounds = false;
-
-  // this.events.onKilled.add(this.onKilled, this);
-
 };
 
 Missile.prototype = Object.create(Phaser.Sprite.prototype);
 Missile.prototype.constructor = Missile;
 
 Missile.prototype.update = function() {
-
-
 };
 
 Missile.prototype.shoot = function() {

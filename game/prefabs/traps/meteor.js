@@ -7,9 +7,9 @@ var MeteorGroup = function(game, parent) {
   Phaser.Group.call(this, game, parent);
 
   var gameWidth = this.game.width;
-  this.rightMeteor = new Missile(this.game, 0, 0, 0, "meteor");
-  this.add(this.rightMeteor);
-  this.rightMeteor.smoothed = false;
+  this.meteor = new Missile(this.game, 0, 0, 0, "meteor");
+  this.add(this.meteor);
+  this.meteor.smoothed = false; // set all doesn't work
   this.setAll('sprite.smoothed', false);
   this.setAll('sprite.scale.y',4);
   this.setAll('sprite.scale.x', 4);
@@ -21,12 +21,11 @@ MeteorGroup.prototype = Object.create(Phaser.Group.prototype);
 MeteorGroup.prototype.constructor = MeteorGroup;
 
 MeteorGroup.prototype.update = function() {
-    this.game.physics.arcade.collide(this.rightMeteor, this.ground);
 };
 
 
 MeteorGroup.prototype.reset = function(x, y) {
-  this.rightMeteor.reset(x, 0);
+  this.meteor.reset(x, 0);
   this.x = x;
   this.y = 0;
   
@@ -34,8 +33,6 @@ MeteorGroup.prototype.reset = function(x, y) {
   var offSet = x%gameWidth/3 > 0 ? x%gameWidth/3 : 0;
   this.setAll('body.velocity.x', -150 - offSet);    // the futher right, bring it back
   this.setAll('body.velocity.y', 150 + offSet);
-  this.hasScored = false;
-  this.exists = true;
 };
 
 
