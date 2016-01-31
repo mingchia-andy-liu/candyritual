@@ -1,5 +1,7 @@
 'use strict';
 
+var blinkingTimer;
+
 var Char1 = function(game, x, y, frame) {
   Phaser.Sprite.call(this, game, x, y, 'char1', frame);
   this.scale.x = 2;
@@ -12,6 +14,7 @@ var Char1 = function(game, x, y, frame) {
   this.name = 'char1';
   this.alive = false;
   this.health = 3;
+  this.isInvincible = false;
 
   // enable physics on the char1
   // and disable gravity on the char1
@@ -63,15 +66,34 @@ Char1.prototype.revived = function() {
 
 Char1.prototype.takeDamage = function() {
   this.health--;
+
+  this.isInvincable = true;
+  blinkingTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.2, this.blinking, this);
+  blinkingTimer.timer.start();
+  this.game.time.events.add(Phaser.Timer.SECOND * 3, this.setNotInvincible, this);
 };
 
 Char1.prototype.getHealth = function() {
   return this.health;
-}
+};
 
 Char1.prototype.gainHealth = function() {
   if (this.health < 3)
     this.health++;
+}
+
+Char1.prototype.blinking = function() {
+  this.tweenTint(this, 0, 0xffffff, 100);
+};
+
+Char1.prototype.setNotInvincible = function() {
+  console.log("inside set to not invincible");
+  this.isInvincible = false;
+  blinkingTimer.timer.stop();
+};
+
+Char1.prototype.setInvincible = function() {
+  this.isInvincible = true;
 }
 
 Char1.prototype.onKilled = function() {
@@ -83,5 +105,21 @@ Char1.prototype.onKilled = function() {
   console.log('killed');
   console.log('alive:', this.alive);
 };
+
+Char1.prototype.tweenTint = function(obj, startColor, endColor, time) {    
+  // create an object to tween with our step value at 0    
+  var colorBlend = {step: 0};    
+  // create the tween on this object and tween its step property to 100    
+  var colorTween = this.game.add.tween(colorBlend).to({step: 100}, time);        
+  // run the interpolateColor function every time the tween updates, feeding it the    
+  // updated value of our tween each time, and set the result as our tint    
+  colorTween.onUpdateCallback(function() {      
+    obj.tint = Phaser.Color.interpolateColor(startColor, endColor, 100, colorBlend.step);       
+  });        // set the object to the start color straight away    
+  obj.tint = startColor;            // start the tween    
+  colorTween.start();
+}
+
+
 
 module.exports = Char1;

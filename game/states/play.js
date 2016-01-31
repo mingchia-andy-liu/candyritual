@@ -133,10 +133,12 @@ Play.prototype = {
     // enable collisions between the char1 and the ground
     this.game.physics.arcade.collide(this.char1, this.ground);
     this.game.physics.arcade.collide(this.meteors, this.ground);
+    if (!this.char1.isInvincible){
+      this.game.physics.arcade.collide(this.char1, this.lava, this.damageHandler, null, this);
+      this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
+      this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
+    }
     this.game.physics.arcade.overlap(this.char1, this.firstAidKit, this.healHandler, null, this);
-    this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
-    this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
-    this.game.physics.arcade.collide(this.char1, this.lava, this.damageHandler, null, this);
 
     if(!this.gameover) {
       // enable collisions between the char1 and each group in the pipes group
@@ -238,11 +240,11 @@ Play.prototype = {
   },
   damageHandler: function(char1, enemy) {
     this.updateHealth('DOWN');
+    this.char1.setInvincible();
     this.char1.takeDamage();
-    
-    
-
-    //TODO: Damage animation / sprite when taking damage
+    if ((enemy instanceof Missile && enemy.key === "missile") ||
+        enemy instanceof Lazer)
+      enemy.kill();
 
     if (this.char1.getHealth() <= 0) {
       this.deathHandler();
