@@ -36,7 +36,7 @@ Preload.prototype = {
     this.load.image('instructions', 'assets/instructions2.png');
     this.load.image('getReady', 'assets/get-ready.png');
 
-    this.load.image('scoreboard', 'assets/scoreboard.png');
+    this.load.image('scoreboard', 'assets/scoreboard1.png');
     this.load.spritesheet('medals', 'assets/medals.png',44, 46, 2);
     this.load.image('gameover', 'assets/gameover.png');
     this.load.image('particle', 'assets/particle.png');
