@@ -92,7 +92,8 @@ Play.prototype = {
     this.scoreText = this.game.add.bitmapText(this.game.width/2, 10, 'flappyfont',this.score.toString(), 24);
 
     this.instructionGroup = this.game.add.group();
-    this.instructionGroup.add(this.game.add.sprite(this.game.width/2, 100,'getReady'));
+    this.instructionGroup.add(this.game.add.sprite(this.game.width/2, 200,'instructions'));
+
     this.instructionGroup.setAll('anchor.x', 0.5);
     this.instructionGroup.setAll('anchor.y', 0.5);
 

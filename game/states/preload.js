@@ -16,7 +16,7 @@ Preload.prototype = {
     this.load.spritesheet('ground', 'assets/ground.png', 21,21,22);
 
     //TODO: UPDATE TITLE
-    this.load.image('title', 'assets/title.png');
+    this.load.image('title', 'assets/splash.png');
 
     //TODO: UPDATE SPRITES
     this.load.spritesheet('lazer', 'assets/projectiles.png', 21,21,21);
@@ -33,7 +33,7 @@ Preload.prototype = {
     this.load.spritesheet('buttons', 'assets/buttons.png', 21, 21, 8);
 
     //TODO: UPDATE INSTRUCTIONS
-    // this.load.image('instructions', 'assets/instructions.png');
+    this.load.image('instructions', 'assets/instructions1.png');
     this.load.image('getReady', 'assets/get-ready.png');
 
     this.load.image('scoreboard', 'assets/scoreboard.png');

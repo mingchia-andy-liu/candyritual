@@ -30,7 +30,9 @@ Menu.prototype = {
     /** STEP 2 **/
     // create the title sprite
     // and add it to the group
-    this.title = this.add.sprite(this.game.width/2,100,'title');
+    this.title = this.add.sprite(this.game.width/2,this.game.height/2,'title');
+    this.title.scale.x = 0.3;
+    this.title.scale.y = 0.3;
     this.title.anchor.setTo(0.5,0.5);
     this.titleGroup.add(this.title);
 
