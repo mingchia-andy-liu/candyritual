@@ -149,10 +149,10 @@ Play.prototype = {
       this.char1.body.allowGravity = true;
       this.char1.alive = true;
       // add a timer
-      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.generatePipes, this);
+      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 25, this.generatePipes, this);
       this.pipeGenerator.timer.start();
 
-      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 20, this.generatePlatforms, this);
+      this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 15, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
       this.instructionGroup.destroy();
