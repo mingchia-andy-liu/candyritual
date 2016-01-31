@@ -88,6 +88,8 @@ Play.prototype = {
 
     this.gameover = false;
 
+    this.gray = this.game.add.filter('Gray');
+
     Phaser.Canvas.setSmoothingEnabled(this, true);
 
     this.sounds = {
@@ -96,9 +98,16 @@ Play.prototype = {
       scoreSound: this.game.add.audio('score')
     }
 
-    // this.pipeHitSound = this.game.add.audio('pipeHit');
-    // this.groundHitSound = this.game.add.audio('groundHit');
-    // this.scoreSound = this.game.add.audio('score');
+    //initialize the buttons
+    this.lazerButton = this.game.add.sprite(this.game.width - 50, 0, 'buttons', 0);
+    this.lazerButton.scale.x = 2;
+    this.lazerButton.scale.y = 2;
+    this.swapKeyButton = this.game.add.sprite(this.game.width - 100, 0, 'buttons', 2);
+    this.swapKeyButton.scale.x = 2;
+    this.swapKeyButton.scale.y = 2;
+    this.missileButton = this.game.add.sprite(this.game.width - 150, 0, 'buttons', 4);
+    this.missileButton.scale.x = 2;
+    this.missileButton.scale.y = 2;
 
 
   },
@@ -134,6 +143,22 @@ Play.prototype = {
     if ( this.lava && this.lava.body.x < -192 && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lavaFireEvent) {
         this.lava.reset();
         DEBUFF_TIMER.lavaFireEvent += this.game.rnd.integerInRange(0,10);
+    }
+
+    this.canFire();
+
+  },
+  canFire: function() {
+    if (this.lazerButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.lazerFireEvent) {
+      this.lazerButton.filters = null;
+    }
+
+    if (this.swapKeyButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer) {
+      this.swapKeyButton.filters = null;
+    }
+
+    if (this.missileButton.filters != null && this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.missileFireEvent) {
+      this.missileButton.filters = null;
     }
 
   },
@@ -239,6 +264,7 @@ Play.prototype = {
       // create and add a new lazer object
       this.lazer = new Lazer(this.game, this.game.width-25, lazerY, 2);
       this.game.add.existing(this.lazer);
+      this.lazerButton.filters = [this.gray];
       DEBUFF_TIMER.lazerFireEvent = 8 + this.game.time.totalElapsedSeconds();
     }
   },
@@ -252,6 +278,7 @@ Play.prototype = {
         this.missile = new Missile(this.game, missleX, missileY, 6, "missile");
         this.game.add.existing(this.missile);
         this.missile.shoot();
+        this.missileButton.filters = [this.gray]
         DEBUFF_TIMER.missileFireEvent = 10 + this.game.time.totalElapsedSeconds();
     }
   },
@@ -275,7 +302,8 @@ Play.prototype = {
     if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.changePlayerControlEvent.timer){
       DEBUFF_TIMER.changePlayerControlEvent.isNormal = !DEBUFF_TIMER.changePlayerControlEvent.isNormal;
       this.swapKeyListeners(DEBUFF_TIMER.changePlayerControlEvent.isNormal);
-      DEBUFF_TIMER.changePlayerControlEvent.timer = 3 + this.game.time.totalElapsedSeconds();
+      this.swapKeyButton.filters = [this.gray];
+      DEBUFF_TIMER.changePlayerControlEvent.timer =  + this.game.time.totalElapsedSeconds();
     }
   },
   swapKeyListeners: function(bool) {
