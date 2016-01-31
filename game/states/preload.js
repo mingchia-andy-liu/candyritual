@@ -19,7 +19,7 @@ Preload.prototype = {
     this.load.image('title', 'assets/title.png');
 
     //TODO: UPDATE SPRITES
-    this.load.spritesheet('lazer', 'assets/pipes.png', 54,320,2);
+    this.load.spritesheet('lazer', 'assets/projectiles.png', 21,21,21);
     this.load.spritesheet('char1', 'assets/char1.png', 21,21,11);
     this.load.spritesheet('enemy', 'assets/enemy.png', 21,21,11);
     this.load.spritesheet('pipe', 'assets/pipes.png', 54,320,2);
@@ -27,7 +27,7 @@ Preload.prototype = {
     this.load.spritesheet('lava', 'assets/ground.png',21,21,22);
     this.load.image('startButton', 'assets/start-button.png');
     this.load.spritesheet('heart', 'assets/hearts.png', 21, 21, 1);
-    this.load.image('missile', 'assets/char1.png');
+    this.load.spritesheet('missile', 'assets/projectiles.png', 21, 21, 21);
 
     //TODO: UPDATE INSTRUCTIONS
     // this.load.image('instructions', 'assets/instructions.png');

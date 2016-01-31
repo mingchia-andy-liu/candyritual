@@ -237,7 +237,7 @@ Play.prototype = {
       console.log(this.game.time.totalElapsedSeconds());
       var lazerY = this.game.rnd.integerInRange(0, 500);
       // create and add a new lazer object
-      this.lazer = new Lazer(this.game, this.game.width-25, lazerY);
+      this.lazer = new Lazer(this.game, this.game.width-25, lazerY, 2);
       this.game.add.existing(this.lazer);
       DEBUFF_TIMER.lazerFireEvent = 8 + this.game.time.totalElapsedSeconds();
     }
@@ -249,7 +249,7 @@ Play.prototype = {
         var missileY = this.enemy.y;
         var missleX = this.enemy.x;
 
-        this.missile = new Missile(this.game, missleX, missileY, 0, "missile");
+        this.missile = new Missile(this.game, missleX, missileY, 6, "missile");
         this.game.add.existing(this.missile);
         this.missile.shoot();
         DEBUFF_TIMER.missileFireEvent = 10 + this.game.time.totalElapsedSeconds();

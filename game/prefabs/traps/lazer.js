@@ -3,6 +3,7 @@
 var Lazer = function(game, x, y, frame) {
   Phaser.Sprite.call(this, game, x, y, 'lazer', frame);
   this.anchor.setTo(0.5, 0.5);
+  this.scale.y = 50;
 
   // enable physics on the lazer
   this.game.physics.arcade.enableBody(this);
