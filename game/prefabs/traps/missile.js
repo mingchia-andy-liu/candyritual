@@ -12,6 +12,8 @@ var Missile = function(game, x, y, frame, type) {
   }
   else {
     Phaser.Sprite.call(this, game, x, y, 'meteor', frame);
+    this.scale.x = 10;
+    this.scale.y = 10;
   }
   this.anchor.setTo(0.5, 0.5);
 
