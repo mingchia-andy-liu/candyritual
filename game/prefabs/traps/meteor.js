@@ -29,8 +29,11 @@ MeteorGroup.prototype.reset = function(x, y) {
   this.rightMeteor.reset(x, 0);
   this.x = x/2;
   this.y = 0;
-  this.setAll('body.velocity.x', -150);
-  this.setAll('body.velocity.y', 150);
+  
+  var gameWidth = this.game.width;
+  var offSet = x%gameWidth/3 > 0 ? x%gameWidth/3 : 0;
+  this.setAll('body.velocity.x', -150 - offSet);    // the futher right, bring it back
+  this.setAll('body.velocity.y', 150 + offSet);
   this.hasScored = false;
   this.exists = true;
 };

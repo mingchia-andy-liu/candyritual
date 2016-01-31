@@ -322,12 +322,12 @@ Play.prototype = {
   },
   generateMeteors: function() {
     if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.meteorsFireEvent) {
-    var meteorsX = this.game.rnd.integerInRange(0, this.game.width);
+    var meteorsX = this.game.rnd.integerInRange(this.game.width/3, this.game.width);
     var meteorsGroup = this.meteors.getFirstExists(false);
     if (!meteorsGroup) {
         meteorsGroup = new Meteor(this.game, this.meteors);
     }
-    meteorsGroup.reset(meteorsX, meteorsX/13);
+    meteorsGroup.reset(meteorsX, 0);
     this.meteorButton.filters = [this.gray]
     DEBUFF_TIMER.meteorsFireEvent = 10 + this.game.time.totalElapsedSeconds();
   }
