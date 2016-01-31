@@ -13,6 +13,8 @@ var PlatformGroup = require('../prefabs/platformGroup');
 var Lava = require('../prefabs/traps/lava');
 var Meteor = require('../prefabs/traps/meteor');
 var FirstAid = require('../prefabs/firstAid');
+var Reward = require('../prefabs/reward');
+var RewardGroup = require('../prefabs/rewardGroup');
 
 var DEBUFF_TIMER = {
   lazerFireEvent: 8,
@@ -55,6 +57,7 @@ Play.prototype = {
     this.pipes = this.game.add.group();
     this.platforms = this.game.add.group();
     this.meteors = this.game.add.group();
+    this.rewards = this.game.add.group();
 
     // create and add a new Ground object
     this.ground = new Ground(this.game, 0, this.game.height-63, 840, 420);
@@ -95,6 +98,8 @@ Play.prototype = {
 
     this.pipeGenerator = null;
 
+    // this.rewardGenerator = null;
+
     this.gameover = false;
 
     this.gray = this.game.add.filter('Gray');
@@ -133,12 +138,12 @@ Play.prototype = {
     this.game.physics.arcade.collide(this.char1, this.firstAidKit, this.healHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.lazer, this.lazerHandler, null, this);
     this.game.physics.arcade.collide(this.char1, this.missile, this.damageHandler, null, this);
-    this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
+    // this.game.physics.arcade.collide(this.char1, this.lava, this.deathHandler, null, this);
 
     if(!this.gameover) {
       // enable collisions between the char1 and each group in the pipes group
       this.pipes.forEach(function(pipeGroup) {
-        this.checkScore(pipeGroup);
+        // this.checkScore(pipeGroup);
         this.game.physics.arcade.collide(this.char1, pipeGroup);
       }, this);
 
@@ -148,6 +153,10 @@ Play.prototype = {
 
       this.meteors.forEach(function(Meteor){
         this.game.physics.arcade.collide(this.char1, Meteor, this.damageHandler, null, this);
+      }, this)
+
+      this.rewards.forEach(function(reward){
+        this.game.physics.arcade.collide(this.char1, reward, this.checkScore, null, this);
       }, this)
     }
 
@@ -209,18 +218,19 @@ Play.prototype = {
       this.platformGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * platformRandInt, this.generatePlatforms, this);
       this.platformGenerator.timer.start();
 
+      this.rewardGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generateRewards, this);
+      this.rewardGenerator.timer.start();
+
       this.instructionGroup.destroy();
       this.lava = new Lava(this.game, this.game.width*2, this.ground.body.y - 5);
       this.game.add.existing(this.lava);
     }
   },
-  checkScore: function(pipeGroup) {
-    if(pipeGroup.exists && !pipeGroup.hasScored && pipeGroup.topPipe.world.x <= this.char1.world.x) {
-      // pipeGroup.hasScored = true;
-      // this.score++;
-      // this.scoreText.setText(this.score.toString());
-      // this.sounds.scoreSound.play();
-    }
+  checkScore: function(char1, reward) {
+      this.score++;
+      this.scoreText.setText(this.score.toString());
+      this.sounds.scoreSound.play();
+      reward.kill();
   },
   healHandler: function(char1, AidKit) {
     this.updateHealth('UP');
@@ -277,6 +287,7 @@ Play.prototype = {
       this.gameover = true;
       this.char1.kill();
       this.pipes.callAll('stop');
+      this.rewards.callAll('stop');
       this.platforms.callAll('stop');
       this.lava.stop();
       this.pipeGenerator.timer.stop();
@@ -325,6 +336,14 @@ Play.prototype = {
       platformGroup = new PlatformGroup(this.game, this.platforms);
     }
     platformGroup.reset(this.game.width, platformY);
+  },
+  generateRewards: function() {
+    var rewardY = this.game.rnd.integerInRange(200, 300);
+    var rewardGroup = this.rewards.getFirstExists(false);
+    if(!rewardGroup) {
+      rewardGroup = new RewardGroup(this.game, this.rewards);
+    }
+    rewardGroup.reset(this.game.width, rewardY);
   },
   generateMeteors: function() {
     if (this.game.time.totalElapsedSeconds() > DEBUFF_TIMER.meteorsFireEvent) {
