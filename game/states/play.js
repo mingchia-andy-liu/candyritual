@@ -155,8 +155,10 @@ Play.prototype = {
     }
     if (this.firstAidNum%4 === 0) {
         this.firstAidNum++;
-        console.log(this.firstAidNum);
-        this.firstAidKit = new FirstAid(this.game, this.game.width/4*3, this.ground.body.y - 20, 0);
+        var xOffSet = this.game.rnd.integerInRange(0, this.game.width);
+        var yOffSet = this.game.rnd.integerInRange(this.game.height/2.5, this.game.height/3*2);
+        var finalYOffSet = yOffSet > this.ground.body.y -20 ? this.ground.body.yOffSet -20 : yOffSet;
+        this.firstAidKit = new FirstAid(this.game, xOffSet, finalYOffSet, 0);
         this.game.add.existing(this.firstAidKit);
     }
 
