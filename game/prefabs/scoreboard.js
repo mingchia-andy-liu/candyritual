@@ -11,10 +11,10 @@ var Scoreboard = function(game) {
   this.scoreboard = this.create(this.game.width / 2, 200, 'scoreboard');
   this.scoreboard.anchor.setTo(0.5, 0.5);
   
-  this.scoreText = this.game.add.bitmapText(this.scoreboard.width, 180, 'flappyfont', '', 18);
+  this.scoreText = this.game.add.bitmapText(this.game.width / 2 + this.scoreboard.width / 4, 180, 'flappyfont', '', 18);
   this.add(this.scoreText);
   
-  this.bestText = this.game.add.bitmapText(this.scoreboard.width, 230, 'flappyfont', '', 18);
+  this.bestText = this.game.add.bitmapText(this.game.width / 2 + this.scoreboard.width / 4, 230, 'flappyfont', '', 18);
   this.add(this.bestText);
 
   // add our start button with a callback
