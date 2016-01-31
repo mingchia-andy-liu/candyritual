@@ -1,9 +1,13 @@
 #!/bin/bash
 
+function cdYO() {
+  cd $HOME/git/deployCandyDance/
+}
 
-grunt build
+
+grunt build;
 cp -rf dist/ ../deployCandyDance/dist/
-cd {$HOME}/git/deployCandyDance/
+ls ../deployCandyDance/dist/
 git add .
 git commit -m "$1"
-git push heroku master
+git push heroku master;
