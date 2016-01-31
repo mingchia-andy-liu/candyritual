@@ -15,6 +15,7 @@ var Meteor = require('../prefabs/traps/meteor');
 var FirstAid = require('../prefabs/firstAid');
 var Reward = require('../prefabs/reward');
 var RewardGroup = require('../prefabs/rewardGroup');
+var Indicator = require('../prefabs/indicator');
 
 var DEBUFFS = {
   lazerFireEvent:
@@ -130,6 +131,8 @@ Play.prototype = {
     this.scaleSpriteBySize(this.missileButton, SCALE_SIZE);
     this.meteorButton = this.game.add.sprite(this.game.width - 200, 0, 'buttons', 6);
     this.scaleSpriteBySize(this.meteorButton, SCALE_SIZE);
+    this.swapIndicator = new Indicator(this.game, this.game.width/2, this.game.height/3, 5);
+    this.game.add.existing(this.swapIndicator);
   },
   update: function() {
     // enable collisions between the char1 and the ground
@@ -391,12 +394,16 @@ Play.prototype = {
   },
   changePlayerControl: function(){
     if (!this.gameover && (this.game.time.totalElapsedSeconds() > DEBUFFS.swapPlayerControlEvent.timer) && this.enemy.alive) {
+      this.swapIndicator.appear();
       this.swapControlSound.play();
       this.swapControlSound.volume = 2;
       DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
       this.swapKeyListeners(DEBUFFS.swapPlayerControlEvent.isNormal);
       DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
-      this.game.time.events.add(Phaser.Timer.SECOND*2, function(){this.swapKeyListeners(DEBUFFS.swapPlayerControlEvent.isNormal)}, this);
+      this.game.time.events.add(Phaser.Timer.SECOND*2, function(){
+        this.swapKeyListeners(DEBUFFS.swapPlayerControlEvent.isNormal);
+        this.swapIndicator.disappear();
+      }, this);
       this.swapKeyButton.filters = [this.gray];
       DEBUFFS.swapPlayerControlEvent.timer = 30 + this.game.time.totalElapsedSeconds();
     }
