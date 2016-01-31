@@ -10,7 +10,7 @@ var Reward = function(game, x, y, frame) {
   this.game.physics.arcade.enableBody(this);
   this.body.allowGravity = false;
   this.body.collideWorldBounds = false;
-  this.body.immovable = false;
+  // this.body.immovable = true;
 };
 
 Reward.prototype = Object.create(Phaser.Sprite.prototype);
