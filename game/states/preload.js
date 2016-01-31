@@ -13,19 +13,31 @@ Preload.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     this.load.image('background', 'assets/background.png');
-    this.load.image('ground', 'assets/ground.png');
+    this.load.spritesheet('ground', 'assets/ground.png', 21,21,22);
+
+    //TODO: UPDATE TITLE
     this.load.image('title', 'assets/title.png');
-    this.load.spritesheet('bird', 'assets/bird.png', 34,24,3);
+
+    //TODO: UPDATE SPRITES
+    this.load.spritesheet('lazer', 'assets/pipes.png', 54,320,2);
+    this.load.spritesheet('char1', 'assets/char1.png', 21,21,11);
+    this.load.spritesheet('enemy', 'assets/enemy.png', 21,21,11);
     this.load.spritesheet('pipe', 'assets/pipes.png', 54,320,2);
+    this.load.spritesheet('platform', 'assets/ground.png',21,21,22);
     this.load.image('startButton', 'assets/start-button.png');
-    
-    this.load.image('instructions', 'assets/instructions.png');
+    this.load.spritesheet('heart', 'assets/hearts.png', 21, 21, 1);
+    this.load.image('missile', 'assets/char1.png');
+    this.load.image('firstaid', 'assets/firstaid.png');
+
+    //TODO: UPDATE INSTRUCTIONS
+    // this.load.image('instructions', 'assets/instructions.png');
     this.load.image('getReady', 'assets/get-ready.png');
-    
+
     this.load.image('scoreboard', 'assets/scoreboard.png');
     this.load.spritesheet('medals', 'assets/medals.png',44, 46, 2);
     this.load.image('gameover', 'assets/gameover.png');
     this.load.image('particle', 'assets/particle.png');
+    this.load.image('meteor', 'assets/meteor.png');
 
     this.load.audio('flap', 'assets/flap.wav');
     this.load.audio('pipeHit', 'assets/pipe-hit.wav');
