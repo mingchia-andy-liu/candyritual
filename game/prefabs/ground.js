@@ -4,7 +4,7 @@ var Ground = function(game, x, y, width, height) {
   Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
   this.frame = 2;
   this.scale.x = 2;
-  this.scale.y = 2;
+  this.scale.y = 3;
   // start scrolling our ground
   this.autoScroll(-100,0);
 

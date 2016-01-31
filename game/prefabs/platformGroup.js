@@ -11,7 +11,7 @@ var PlatformGroup = function(game, parent) {
   this.add(this.topPlatform);
   this.add(this.bottomPlatform);
 
-  this.setAll('body.velocity.x', -200);
+  this.setAll('body.velocity.x', -150);
 };
 
 PlatformGroup.prototype = Object.create(Phaser.Group.prototype);
@@ -25,7 +25,7 @@ PlatformGroup.prototype.reset = function(x, y) {
   this.bottomPlatform.reset(0, y);
   this.x = x;
   this.y = y;
-  this.setAll('body.velocity.x', -200);
+  this.setAll('body.velocity.x', -150);
   this.hasScored = false;
   this.exists = true;
 };

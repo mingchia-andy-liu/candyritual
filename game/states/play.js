@@ -52,7 +52,7 @@ Play.prototype = {
     this.meteors = this.game.add.group();
 
     // create and add a new Ground object
-    this.ground = new Ground(this.game, 0, this.game.height-42, 840, 420);
+    this.ground = new Ground(this.game, 0, this.game.height-63, 840, 420);
     this.game.add.existing(this.ground);
 
     // create and add a new Char1 object
@@ -254,7 +254,7 @@ Play.prototype = {
     }
   },
   generatePlatforms: function() {
-    var platformY = this.game.rnd.integerInRange(200, 300);
+    var platformY = this.game.rnd.integerInRange(220, 320);
     var platformGroup = this.platforms.getFirstExists(false);
     if(!platformGroup) {
       platformGroup = new PlatformGroup(this.game, this.platforms);
