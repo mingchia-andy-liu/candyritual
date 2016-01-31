@@ -11,6 +11,7 @@ var Enemy = function(game, x, y, frame) {
   // this.animations.add('angry', [4,5,6], 10, true);
 
   this.name = 'enemy';
+  this.alive = false;
 
   // enable physics on the enemy
   // and disable gravity on the enemy
@@ -18,6 +19,8 @@ var Enemy = function(game, x, y, frame) {
   this.game.physics.arcade.enableBody(this);
   this.body.allowGravity = false;
   this.body.collideWorldBounds = true;
+
+  this.events.onKilled.add(this.onKilled, this);
 
 };
 
@@ -30,22 +33,38 @@ Enemy.prototype.update = function() {
 };
 
 Enemy.prototype.moveUp = function() {
+  if (!!this.alive) {
     this.body.velocity.y = -100;
+  }
 };
 
 Enemy.prototype.moveLeft = function() {
+  if (!!this.alive) {
     this.body.velocity.x = -100;
+  }
 };
 
 Enemy.prototype.moveRight = function() {
+  if (!!this.alive) {
     this.body.velocity.x = 100;
+  }
 };
 
 Enemy.prototype.moveDown = function() {
+  if (!!this.alive) {
     this.body.velocity.y = 100;
+  }
 };
 
 Enemy.prototype.revived = function() {
+};
+
+Enemy.prototype.onKilled = function() {
+  this.exists = true;
+  this.visible = true;
+  this.body.velocity.y = 0;
+  this.body.velocity.x = 0;
+  // this.animations.stop();
 };
 
 

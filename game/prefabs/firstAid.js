@@ -8,10 +8,8 @@ var FirstAid = function(game, x, y, frame) {
   this.anchor.setTo(0.5, 0.5);
   this.game.physics.arcade.enableBody(this);
   this.body.allowGravity = false;
-  this.body.collideWorldBounds = false;
+  this.body.collideWorldBounds = true;
   this.body.immovable = true;
-
-  // this.events.onKilled.add(this.onKilled, this);
 
 };
 

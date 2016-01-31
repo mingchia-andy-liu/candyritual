@@ -9,9 +9,6 @@ var Char1 = function(game, x, y, frame) {
   this.animations.play('walk');
   // this.animations.add('duck', [3], 10, true);
 
-
-  this.flapSound = this.game.add.audio('flap');
-
   this.name = 'char1';
   this.alive = false;
   this.health = 3;
@@ -23,10 +20,7 @@ var Char1 = function(game, x, y, frame) {
   this.body.allowGravity = true;
   this.body.collideWorldBounds = true;
 
-
   this.events.onKilled.add(this.onKilled, this);
-
-
 
 };
 
@@ -34,8 +28,7 @@ Char1.prototype = Object.create(Phaser.Sprite.prototype);
 Char1.prototype.constructor = Char1;
 
 Char1.prototype.update = function() {
-  // check to see if our angle is less than 90
-  // if it is rotate the Char1 towards the ground by 2.5 degrees
+
   if(!this.alive) {
     this.body.velocity.x = 0;
   }

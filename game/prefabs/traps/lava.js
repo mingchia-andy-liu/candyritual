@@ -6,7 +6,6 @@ var Lava = function(game, x, y, frame) {
   this.scale.y = 4;
   this.frame = 21;
 
-  // this.anchor.setTo(0.5, 0);	//tip of the sprite
   this.game.physics.arcade.enableBody(this);
   
   this.body.velocity.x = -200;
@@ -20,7 +19,6 @@ Lava.prototype.constructor = Lava;
 
 Lava.prototype.update = function() {
   // write your prefab's specific update code here
-  
 };
 
 Lava.prototype.stop = function() {
