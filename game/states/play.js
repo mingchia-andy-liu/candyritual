@@ -40,6 +40,7 @@ var DEBUFFS = {
     }
 };
 
+const SCALE_SIZE = 2;
 
 function Play() {
 }
@@ -56,17 +57,11 @@ Play.prototype = {
 
     //initialize the health bars
     this.healthBar1 = this.game.add.sprite(0, 0, 'heart');
-    this.healthBar1.scale.x = 2;
-    this.healthBar1.scale.y = 2;
-    this.healthBar1.smoothed = false;
+    this.scaleSpriteBySize(this.healthBar1, SCALE_SIZE);
     this.healthBar2 = this.game.add.sprite(50, 0, 'heart');
-    this.healthBar2.scale.x = 2;
-    this.healthBar2.scale.y = 2;
-    this.healthBar2.smoothed = false;
+    this.scaleSpriteBySize(this.healthBar2, SCALE_SIZE);
     this.healthBar3 = this.game.add.sprite(100, 0, 'heart');
-    this.healthBar3.scale.x = 2;
-    this.healthBar3.scale.y = 2;
-    this.healthBar3.smoothed = false;
+    this.scaleSpriteBySize(this.healthBar3, SCALE_SIZE);
 
     // create and add a group to hold our pipeGroup prefabs
     this.pipes = this.game.add.group();
@@ -126,21 +121,13 @@ Play.prototype = {
 
     //initialize the buttons
     this.lazerButton = this.game.add.sprite(this.game.width - 50, 0, 'buttons', 0);
-    this.lazerButton.scale.x = 2;
-    this.lazerButton.scale.y = 2;
-    this.lazerButton.smoothed = false;
+    this.scaleSpriteBySize(this.lazerButton, SCALE_SIZE);
     this.swapKeyButton = this.game.add.sprite(this.game.width - 100, 0, 'buttons', 2);
-    this.swapKeyButton.scale.x = 2;
-    this.swapKeyButton.scale.y = 2;
-    this.swapKeyButton.smoothed = false;
+    this.scaleSpriteBySize(this.swapKeyButton, SCALE_SIZE);
     this.missileButton = this.game.add.sprite(this.game.width - 150, 0, 'buttons', 4);
-    this.missileButton.scale.x = 2;
-    this.missileButton.scale.y = 2;
-    this.missileButton.smoothed = false;
+    this.scaleSpriteBySize(this.missileButton, SCALE_SIZE);
     this.meteorButton = this.game.add.sprite(this.game.width - 200, 0, 'buttons', 6);
-    this.meteorButton.scale.x = 2;
-    this.meteorButton.scale.y = 2;
-    this.meteorButton.smoothed = false;
+    this.scaleSpriteBySize(this.meteorButton, SCALE_SIZE);
   },
   update: function() {
     // enable collisions between the char1 and the ground
@@ -384,22 +371,22 @@ Play.prototype = {
   },
   swapKeyListeners: function(bool) {
     console.log(bool);
-  if (bool) {
-    this.upKey.onDown.remove(this.char1.moveRight,this.char1);
-    this.leftKey.onDown.remove(this.char1.moveUp,this.char1);
-    this.rightKey.onDown.remove(this.char1.moveLeft,this.char1);
-    this.upKey.onDown.add(this.char1.moveUp, this.char1);
-    this.leftKey.onDown.add(this.char1.moveLeft, this.char1);
-    this.rightKey.onDown.add(this.char1.moveRight, this.char1);
-  } else {
-    this.upKey.onDown.remove(this.char1.moveUp,this.char1);
-    this.leftKey.onDown.remove(this.char1.moveLeft,this.char1);
-    this.rightKey.onDown.remove(this.char1.moveRight,this.char1);
-    this.upKey.onDown.add(this.char1.moveRight, this.char1);
-    this.leftKey.onDown.add(this.char1.moveUp, this.char1);
-    this.rightKey.onDown.add(this.char1.moveLeft, this.char1);
-  }
-},
+    if (bool) {
+      this.upKey.onDown.remove(this.char1.moveRight,this.char1);
+      this.leftKey.onDown.remove(this.char1.moveUp,this.char1);
+      this.rightKey.onDown.remove(this.char1.moveLeft,this.char1);
+      this.upKey.onDown.add(this.char1.moveUp, this.char1);
+      this.leftKey.onDown.add(this.char1.moveLeft, this.char1);
+      this.rightKey.onDown.add(this.char1.moveRight, this.char1);
+    } else {
+      this.upKey.onDown.remove(this.char1.moveUp,this.char1);
+      this.leftKey.onDown.remove(this.char1.moveLeft,this.char1);
+      this.rightKey.onDown.remove(this.char1.moveRight,this.char1);
+      this.upKey.onDown.add(this.char1.moveRight, this.char1);
+      this.leftKey.onDown.add(this.char1.moveUp, this.char1);
+      this.rightKey.onDown.add(this.char1.moveLeft, this.char1);
+    }
+  },
   setUpKeyListeners: function() {
 
     this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -444,6 +431,11 @@ Play.prototype = {
 
     this.changePlayerControlKey = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     this.changePlayerControlKey.onDown.add(this.changePlayerControl, this);
+  },
+  scaleSpriteBySize: function(oSprite, iSize) {
+    oSprite.scale.x = iSize;
+    oSprite.scale.y = iSize;
+    oSprite.smoothed = false;
   }
 
 };
