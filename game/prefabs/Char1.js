@@ -1,5 +1,9 @@
 'use strict';
 
+var Missile = require('./traps/missile');
+var Lava = require('./traps/lava');
+var Lazer = require('./traps/lazer');
+
 var blinkingTimer;
 
 var Char1 = function(game, x, y, frame) {
@@ -15,6 +19,11 @@ var Char1 = function(game, x, y, frame) {
   this.alive = false;
   this.health = 3;
   this.isInvincible = false;
+
+  this.jumpSound = this.game.add.audio('jump');
+  this.lazerSound = this.game.add.audio('lazer_hit');
+  this.lavaSound = this.game.add.audio('lava_hit');
+  this.missileSound = this.game.add.audio('missile_hit');
 
   // enable physics on the char1
   // and disable gravity on the char1
@@ -40,12 +49,13 @@ Char1.prototype.update = function() {
 Char1.prototype.moveUp = function() {
   if(!!this.alive && this.body.touching.down) {
     this.body.velocity.y = -600;
+    this.jumpSound.play();
   }
 };
 
 Char1.prototype.moveLeft = function() {
   if (!!this.alive) {
-    this.body.velocity.x = -400;
+    this.body.velocity.x = -250;
   }
 };
 
@@ -64,7 +74,23 @@ Char1.prototype.moveDown = function() {
 Char1.prototype.revived = function() {
 };
 
-Char1.prototype.takeDamage = function() {
+Char1.prototype.takeDamage = function(enemy) {
+  if (enemy instanceof Missile) {
+    if (enemy.key === "missile") {
+      this.missileSound.play();
+    } else {
+      //add meteor hit sound
+    }
+  }
+
+  if (enemy instanceof Lava) {
+    this.lavaSound.play();
+  }
+
+  if (enemy instanceof Lazer) {
+    this.lazerSound.play();
+  }
+
   this.health--;
 
   this.isInvincable = true;
@@ -106,17 +132,17 @@ Char1.prototype.onKilled = function() {
   console.log('alive:', this.alive);
 };
 
-Char1.prototype.tweenTint = function(obj, startColor, endColor, time) {    
-  // create an object to tween with our step value at 0    
-  var colorBlend = {step: 0};    
-  // create the tween on this object and tween its step property to 100    
-  var colorTween = this.game.add.tween(colorBlend).to({step: 100}, time);        
-  // run the interpolateColor function every time the tween updates, feeding it the    
-  // updated value of our tween each time, and set the result as our tint    
-  colorTween.onUpdateCallback(function() {      
-    obj.tint = Phaser.Color.interpolateColor(startColor, endColor, 100, colorBlend.step);       
-  });        // set the object to the start color straight away    
-  obj.tint = startColor;            // start the tween    
+Char1.prototype.tweenTint = function(obj, startColor, endColor, time) {
+  // create an object to tween with our step value at 0
+  var colorBlend = {step: 0};
+  // create the tween on this object and tween its step property to 100
+  var colorTween = this.game.add.tween(colorBlend).to({step: 100}, time);
+  // run the interpolateColor function every time the tween updates, feeding it the
+  // updated value of our tween each time, and set the result as our tint
+  colorTween.onUpdateCallback(function() {
+    obj.tint = Phaser.Color.interpolateColor(startColor, endColor, 100, colorBlend.step);
+  });        // set the object to the start color straight away
+  obj.tint = startColor;            // start the tween
   colorTween.start();
 }
 

@@ -32,7 +32,6 @@ Preload.prototype = {
     this.load.spritesheet('missile', 'assets/projectiles.png', 21, 21, 21);
     this.load.spritesheet('buttons', 'assets/buttons.png', 21, 21, 8);
 
-    //TODO: UPDATE INSTRUCTIONS
     this.load.image('instructions', 'assets/instructions2.png');
     this.load.image('getReady', 'assets/get-ready.png');
 
@@ -44,11 +43,20 @@ Preload.prototype = {
 
     this.load.script('gray', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Gray.js');
 
-    this.load.audio('flap', 'assets/flap.wav');
-    this.load.audio('pipeHit', 'assets/pipe-hit.wav');
-    this.load.audio('groundHit', 'assets/ground-hit.wav');
+    this.load.audio('menu_music', 'assets/Happy_Music.wav');
+    this.load.audio('action_music', 'assets/action_music.wav');
+    this.load.audio('lazer_shot', 'assets/laser_shot.wav');
+    this.load.audio('lazer_hit', 'assets/Laser_Hit.wav');
+    this.load.audio('lava_flow', 'assets/lava_flow.wav');
+    this.load.audio('lava_hit', 'assets/lava_hit.wav');
+    this.load.audio('missile_launch', 'assets/missile_launch.wav');
+    this.load.audio('missile_hit', 'assets/Missile_Player.wav');
+    this.load.audio('jump', 'assets/flap.wav');
     this.load.audio('score', 'assets/score.wav');
     this.load.audio('ouch', 'assets/ouch.wav');
+    this.load.audio('menu_whoosh', 'assets/menu_whoosh_up.wav');
+    this.load.audio('meteor_sound', 'assets/Missile_Explosion.wav');
+    this.load.audio('game_over_sound', 'assets/smb_mariodie.wav');
 
     this.load.bitmapFont('flappyfont', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt');
 

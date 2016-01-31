@@ -12,6 +12,12 @@ Menu.prototype = {
 
     this.background.smoothed = false;
 
+    this.music = this.game.add.audio('menu_music');
+    this.music.play();
+
+    this.menuClick = this.game.add.audio('menu_whoosh');
+
+
     // add the ground sprite as a tile
     // and start scrolling in the negative x direction
     this.ground = this.game.add.tileSprite(0,this.game.height-45,840,420,'ground');
@@ -71,6 +77,8 @@ Menu.prototype = {
   startClick: function() {
     // start button click handler
     // start the 'play' state
+    this.music.stop();
+    this.menuClick.play();
     this.game.state.start('play');
   }
 };

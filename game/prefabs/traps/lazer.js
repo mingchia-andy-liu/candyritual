@@ -6,6 +6,9 @@ var Lazer = function(game, x, y, frame) {
   this.scale.y = 50;
   this.scale.x = 2;
 
+  this.lazerSound = this.game.add.audio('lazer_shot');
+  this.lazerSound.play();
+
   // enable physics on the lazer
   this.game.physics.arcade.enableBody(this);
   this.body.allowGravity = false;
@@ -39,8 +42,10 @@ Lazer.prototype.activate = function() {
   this.count++
   if (this.count % 2 == 0 ) {
     this.appear();
+    this.lazerSound.play();
   } else {
     this.disappear();
+    this.lazerSound.stop();
   }
 };
 

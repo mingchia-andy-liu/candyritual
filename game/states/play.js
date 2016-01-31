@@ -52,6 +52,12 @@ Play.prototype = {
     // give our world an initial gravity of 1200
     this.game.physics.arcade.gravity.y = 1200;
 
+    //load audio
+    this.actionMusic = this.game.add.audio('action_music');
+    this.instructionMusic = this.game.add.audio('menu_music');
+    this.instructionMusic.play();
+    this.gameOverSound = this.game.add.audio('game_over_sound');
+
     // add the background sprite
     this.background = this.game.add.tileSprite(0,-42,840,420,'background');
 
@@ -206,6 +212,8 @@ Play.prototype = {
 
   startGame: function() {
     if(!this.char1.alive && !this.gameover) {
+      this.instructionMusic.stop();
+      this.actionMusic.play();
       this.char1.body.allowGravity = true;
       this.char1.alive = true;
       this.enemy.alive = true;
@@ -241,10 +249,10 @@ Play.prototype = {
   damageHandler: function(char1, enemy) {
     this.updateHealth('DOWN');
     this.char1.setInvincible();
-    this.char1.takeDamage();
-    if ((enemy instanceof Missile && enemy.key === "missile") ||
-        enemy instanceof Lazer)
+    this.char1.takeDamage(enemy);
+    if (enemy instanceof Missile && enemy.key === "missile") {
       enemy.kill();
+    }
 
     if (this.char1.getHealth() <= 0) {
       this.deathHandler();
@@ -281,7 +289,7 @@ Play.prototype = {
   },
   deathHandler: function(char1, enemy) {
     if(!this.gameover) {
-      this.sounds.groundHitSound.play();
+      this.gameOverSound.play();
       this.scoreboard = new Scoreboard(this.game);
       this.game.add.existing(this.scoreboard);
       this.scoreboard.show(this.score);
@@ -295,6 +303,7 @@ Play.prototype = {
       if (this.lazer) {
         this.lazer.kill();
       }
+      this.actionMusic.stop();
       this.pipeGenerator.timer.stop();
       this.ground.stopScroll();
       DEBUFFS.lazerFireEvent.timer = DEBUFFS.lazerFireEvent.reset;
@@ -331,9 +340,9 @@ Play.prototype = {
 
         this.missile = new Missile(this.game, missleX, missileY, 6, "missile");
         this.game.add.existing(this.missile);
-        
+
         this.missile.shoot();
-        
+
         this.firstAidNum++;
         this.missileButton.filters = [this.gray]
         DEBUFFS.missileFireEvent.timer = 10 +  this.game.time.totalElapsedSeconds();
