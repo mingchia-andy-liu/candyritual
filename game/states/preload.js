@@ -35,7 +35,6 @@ Preload.prototype = {
     this.load.image('getReady', 'assets/get-ready.png');
 
     this.load.image('scoreboard', 'assets/scoreboard1.png');
-    this.load.spritesheet('medals', 'assets/medals.png',44, 46, 2);
     this.load.image('gameover', 'assets/gameover.png');
     this.load.image('particle', 'assets/particle.png');
     this.load.spritesheet('meteor', 'assets/meteor1.png',21,13,3);
@@ -52,7 +51,6 @@ Preload.prototype = {
     this.load.audio('missile_hit', 'assets/Missile_Player.wav');
     this.load.audio('jump', 'assets/flap.wav');
     this.load.audio('score', 'assets/score.wav');
-    this.load.audio('ouch', 'assets/ouch.wav');
     this.load.audio('menu_whoosh', 'assets/menu_whoosh_up.wav');
     this.load.audio('meteor_sound', 'assets/Missile_Explosion.wav');
     this.load.audio('game_over_sound', 'assets/smb_mariodie.wav');
