@@ -13,6 +13,7 @@ Menu.prototype = {
     this.background.smoothed = false;
 
     this.music = this.game.add.audio('menu_music');
+    this.music.loop = true;
     this.music.play();
 
     this.menuClick = this.game.add.audio('menu_whoosh');
