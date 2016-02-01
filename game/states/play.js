@@ -403,8 +403,6 @@ Play.prototype = {
       DEBUFFS.swapPlayerControlEvent.isNormal = !DEBUFFS.swapPlayerControlEvent.isNormal;
       this.game.time.events.add(Phaser.Timer.SECOND*2, function(){
         this.swapKeyListeners(DEBUFFS.swapPlayerControlEvent.isNormal);
-      }, this);
-      this.game.time.events.add(Phaser.Timer.SECOND*2, function(){
         this.swapIndicator.disappear();
       }, this);
       this.swapKeyButton.filters = [this.gray];
