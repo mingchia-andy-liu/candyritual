@@ -228,8 +228,8 @@ Play.prototype = {
   startGame: function() {
     if(!this.char1.alive && !this.gameover) {
       this.instructionMusic.stop();
-      this.actionMusic.play();
       this.actionMusic.loop = true;
+      this.actionMusic.play();
       this.char1.body.allowGravity = true;
       this.char1.alive = true;
       this.enemy.alive = true;
