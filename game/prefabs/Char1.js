@@ -93,10 +93,10 @@ Char1.prototype.takeDamage = function(enemy) {
 
   this.health--;
 
-  this.isInvincable = true;
-  blinkingTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.2, this.blinking, this);
-  blinkingTimer.timer.start();
-  this.game.time.events.add(Phaser.Timer.SECOND * 3, this.setNotInvincible, this);
+  this.isInvincible = true;
+  this.blinkingTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.2, this.blinking, this);
+  this.timely = this.game.time.events.add(Phaser.Timer.SECOND * 3, this.setNotInvincible, this);
+
 };
 
 Char1.prototype.getHealth = function() {
@@ -106,7 +106,7 @@ Char1.prototype.getHealth = function() {
 Char1.prototype.gainHealth = function() {
   if (this.health < 3)
     this.health++;
-}
+};
 
 Char1.prototype.blinking = function() {
   this.tweenTint(this, 0, 0xffffff, 100);
@@ -115,7 +115,7 @@ Char1.prototype.blinking = function() {
 Char1.prototype.setNotInvincible = function() {
   console.log("inside set to not invincible");
   this.isInvincible = false;
-  blinkingTimer.timer.stop();
+  this.game.time.events.remove(this.blinkingTimer);
 };
 
 Char1.prototype.setInvincible = function() {
