@@ -95,7 +95,7 @@ Char1.prototype.takeDamage = function(enemy) {
 
   this.isInvincible = true;
   this.blinkingTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.2, this.blinking, this);
-  this.timely = this.game.time.events.add(Phaser.Timer.SECOND * 3, this.setNotInvincible, this);
+  this.game.time.events.add(Phaser.Timer.SECOND * 3, this.setNotInvincible, this);
 
 };
 
