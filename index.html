@@ -4,11 +4,11 @@
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 <head>
-  <title>Candy Ritual</title>
+  <title>Candy Dance</title>
   <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <div id="candy-ritual"></div>
+  <div id="candy-dance"></div>
   <script src="js/phaser.js"></script>
   <script src="js/game.js"></script>
 </body>

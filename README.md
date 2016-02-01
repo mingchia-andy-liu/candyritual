@@ -1,4 +1,4 @@
-#Candy Ritual
+#Candy Dance
 Built with Phaser 2.4.4
 
 ### Branches
