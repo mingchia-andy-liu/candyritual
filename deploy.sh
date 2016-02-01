@@ -7,7 +7,7 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 grunt build;
-cp -rf dist/ ../deployCandyDance/dist/
+cp -rf dist/ ../deployCandyDance/
 ls -la ../deployCandyDance/dist/
 #git --git-dir=../deployCandyDance/.git add .
 #git --git-dir=../deployCandyDance/.git commit -m "$1"
