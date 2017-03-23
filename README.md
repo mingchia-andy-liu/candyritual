@@ -3,7 +3,6 @@
 
 
 Built with Phaser 2.4.4
-====================
 Play now: http://candydance.herokuapp.com/
 
 Shoutout to Nick Pelletier from Tree of Audio for providing the amazing sound bits!
